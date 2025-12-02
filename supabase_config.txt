@@ -1,8 +1,0 @@
-# COPIA ESTO EN TU ARCHIVO .env O .env.local
-# REEMPLAZA [YOUR-PASSWORD] CON TU CONTRASEÑA REAL DE SUPABASE
-
-# Connect to Supabase via connection pooling
-DATABASE_URL="postgresql://postgres.tvzgyqigupkbfhnramfw:[H9w*Bcc5.E_C5n%]@aws-1-us-east-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
-
-# Direct connection to the database. Used for migrations
-DIRECT_URL="postgresql://postgres.tvzgyqigupkbfhnramfw:[H9w*Bcc5.E_C5n%]@aws-1-us-east-2.pooler.supabase.com:5432/postgres"
