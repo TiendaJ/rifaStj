@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Rifa {
+  id               String   @id @default(uuid())
+  nombre           String
+  descripcion      String
+  monto            Float
+  imagen           String?
+  estado           String   @default("activa") // activa, pausada, finalizada, desactivada
+  capacidad_maxima Int
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  fecha_sorteo     DateTime?
+
+  participantes RifaParticipante[]
+}
+
+model Participante {
+  id            String   @id @default(uuid())
+  dni           String   @unique
+  telefono      String   @unique
+  nombre        String?
+  password      String
+  estado_cuenta String   @default("activo") // activo, bloqueado
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  inscripciones RifaParticipante[]
+}
+
+model RifaParticipante {
+  id                 String   @id @default(uuid())
+  rifa_id            String
+  participante_id    String
+  estado             String   @default("pendiente") // pendiente, aprobado, rechazado, confirmado
+  comprobante_imagen String?
+  fecha_inscripcion  DateTime @default(now())
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  rifa         Rifa         @relation(fields: [rifa_id], references: [id])
+  participante Participante @relation(fields: [participante_id], references: [id])
+
+  @@unique([rifa_id, participante_id]) // Un participante solo puede inscribirse una vez por rifa (o quitar si se permiten múltiples tickets)
+}

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
+import { Inter } from "next/font/google";
+import { LogIn, UserPlus } from "lucide-react";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Inter font for body text (high‑performance sans‑serif)
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,9 +26,34 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} antialiased font-sans bg-white text-black bg-grid-pattern min-h-screen flex flex-col`}
       >
-        {children}
+        {/* Header – Ultra-minimal, sticky, backdrop blur */}
+        <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
+          <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
+                <span className="text-sm">R</span>
+              </div>
+              <span>RifaManía</span>
+            </Link>
+            <nav className="flex items-center gap-6 text-sm font-medium">
+              <Link href="/login" className="text-gray-600 hover:text-black transition-colors flex items-center gap-2">
+                <LogIn className="w-4 h-4" />
+                <span>Iniciar Sesión</span>
+              </Link>
+              <Link href="/register" className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition-all active:scale-95 flex items-center gap-2">
+                <UserPlus className="w-4 h-4" />
+                <span>Registrarse</span>
+              </Link>
+            </nav>
+          </div>
+        </header>
+
+        {/* Main Content - Centered, spacious */}
+        <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {children}
+        </main>
       </body>
     </html>
   );
