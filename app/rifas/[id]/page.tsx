@@ -23,11 +23,11 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
     if (!rifa) notFound();
 
     const session = await getSession();
-    const isClient = session?.role === 'client';
+    const isClient = session?.role !== 'admin';
 
     // Check if already subscribed
     let isSubscribed = false;
-    if (isClient) {
+    if (session && isClient) {
         const existing = await prisma.rifaParticipante.findUnique({
             where: {
                 rifa_id_participante_id: {

@@ -25,10 +25,12 @@ model Rifa {
 
 model Participante {
   id            String   @id @default(uuid())
-  dni           String   @unique
-  telefono      String   @unique
+  dni           String?  @unique
+  telefono      String?  @unique
+  email         String?  @unique
+  supabase_id   String?  @unique
   nombre        String?
-  password      String
+  password      String?
   estado_cuenta String   @default("activo") // activo, bloqueado
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt

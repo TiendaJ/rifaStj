@@ -13,8 +13,11 @@ const inscripcionSchema = z.object({
 
 export async function inscribirse(prevState: any, formData: FormData) {
     const session = await getSession();
-    if (!session || session.role !== 'client') {
-        return { error: { root: ["Debes iniciar sesión como cliente"] } };
+    if (!session) {
+        return { error: { root: ["Debes iniciar sesión"] } };
+    }
+    if (session.role === 'admin') {
+        return { error: { root: ["Los administradores no pueden inscribirse"] } };
     }
 
     const rawData = Object.fromEntries(formData.entries());

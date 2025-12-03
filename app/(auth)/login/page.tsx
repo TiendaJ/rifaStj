@@ -4,6 +4,8 @@ import { login } from '@/app/actions/auth';
 import { useActionState } from 'react';
 import Link from 'next/link';
 
+import GoogleAuthButton from '@/components/GoogleAuthButton';
+
 export default function LoginPage() {
     const [state, action, pending] = useActionState(login, undefined);
 
@@ -12,6 +14,19 @@ export default function LoginPage() {
             <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Bienvenido</h2>
                 <p className="text-gray-500 mt-2 text-sm">Ingresa a tu cuenta para continuar</p>
+            </div>
+
+            <div className="mb-6">
+                <GoogleAuthButton text="Iniciar sesión con Google" />
+
+                <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">O ingresa con credenciales</span>
+                    </div>
+                </div>
             </div>
 
             <form action={action} className="space-y-6">
