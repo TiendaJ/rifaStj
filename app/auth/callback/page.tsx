@@ -33,7 +33,9 @@ export default function AuthCallbackPage() {
                     const result = await googleLogin({ email, id, nombre });
 
                     if (result.success) {
-                        router.push(next || '/mis-inscripciones');
+                        const storedNext = localStorage.getItem('auth_next');
+                        if (storedNext) localStorage.removeItem('auth_next');
+                        router.push(next || storedNext || '/mis-inscripciones');
                     } else {
                         setError('Error al iniciar sesión en el servidor.');
                     }
@@ -53,7 +55,9 @@ export default function AuthCallbackPage() {
                         if (email) {
                             const result = await googleLogin({ email, id, nombre });
                             if (result.success) {
-                                router.push(next || '/mis-inscripciones');
+                                const storedNext = localStorage.getItem('auth_next');
+                                if (storedNext) localStorage.removeItem('auth_next');
+                                router.push(next || storedNext || '/mis-inscripciones');
                             }
                         }
                     }

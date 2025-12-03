@@ -72,10 +72,15 @@ export default function RifaCard({ rifa }: RifaCardProps) {
         if (session) {
             router.push(`/rifas/${rifa.id}`);
         } else {
+            // Save next URL to localStorage to avoid polluting the redirect URL which can cause Supabase to reject it
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('auth_next', `/rifas/${rifa.id}`);
+            }
+
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback?next=/rifas/${rifa.id}`,
+                    redirectTo: `${window.location.origin}/auth/callback`,
                     queryParams: {
                         access_type: 'offline',
                         prompt: 'consent',
