@@ -5,8 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { getSession } from '@/lib/auth';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { supabase } from '@/lib/supabase';
 
 const inscripcionSchema = z.object({
     rifa_id: z.string(),
@@ -69,9 +68,26 @@ export async function inscribirse(prevState: any, formData: FormData) {
         const bytes = await comprobanteFile.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const filename = `comprobante-${Date.now()}-${comprobanteFile.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-        const uploadDir = join(process.cwd(), 'public', 'uploads');
-        await writeFile(join(uploadDir, filename), buffer);
-        comprobantePath = `/uploads/${filename}`;
+
+        const { error: uploadError } = await supabase
+            .storage
+            .from('comprobantes')
+            .upload(filename, buffer, {
+                contentType: comprobanteFile.type,
+                upsert: false
+            });
+
+        if (uploadError) {
+            console.error('Supabase upload error:', uploadError);
+            return { error: { root: ["Error al subir el comprobante"] } };
+        }
+
+        const { data: { publicUrl } } = supabase
+            .storage
+            .from('comprobantes')
+            .getPublicUrl(filename);
+
+        comprobantePath = publicUrl;
     } else {
         return { error: { root: ["Debes subir el comprobante de pago"] } };
     }
