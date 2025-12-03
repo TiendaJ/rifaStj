@@ -15,7 +15,7 @@ export default async function EditParticipantePage({ params }: { params: Promise
     return (
         <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Editar Participante</h2>
-            <ParticipanteForm participante={participante} />
+            <ParticipanteForm participante={participante as any} />
         </div>
     );
 }
