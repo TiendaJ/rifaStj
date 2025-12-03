@@ -4,8 +4,7 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { supabase } from '@/lib/supabase';
 
 const rifaSchema = z.object({
     nombre: z.string().min(3, "Nombre muy corto"),
@@ -15,6 +14,32 @@ const rifaSchema = z.object({
     estado: z.enum(['activa', 'pausada', 'finalizada', 'desactivada']),
     fecha_sorteo: z.string().optional().transform((str) => str ? new Date(str) : null),
 });
+
+async function uploadImage(file: File): Promise<string | null> {
+    if (!file || file.size === 0) return null;
+
+    const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const { error } = await supabase.storage
+        .from('rifas')
+        .upload(filename, buffer, {
+            contentType: file.type,
+            upsert: false
+        });
+
+    if (error) {
+        console.error('Supabase upload error:', error);
+        throw new Error('Error al subir la imagen');
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+        .from('rifas')
+        .getPublicUrl(filename);
+
+    return publicUrl;
+}
 
 export async function createRifa(prevState: any, formData: FormData) {
     const rawData = Object.fromEntries(formData.entries());
@@ -27,17 +52,11 @@ export async function createRifa(prevState: any, formData: FormData) {
     const imageFile = formData.get('imagen') as File;
     let imagePath = null;
 
-    if (imageFile && imageFile.size > 0) {
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const filename = `${Date.now()}-${imageFile.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-        const uploadDir = join(process.cwd(), 'public', 'uploads');
-        await writeFile(join(uploadDir, filename), buffer);
-        imagePath = `/uploads/${filename}`;
+    try {
+        imagePath = await uploadImage(imageFile);
+    } catch (error) {
+        return { error: { imagen: ['Error al subir la imagen. Verifica la configuración de Supabase.'] } };
     }
-
-    // Destructure fecha_sorteo to avoid "Unknown argument" error in outdated Prisma Client
-    // NOW REVERTED: We can use standard API after client regeneration
 
     await prisma.rifa.create({
         data: {
@@ -62,12 +81,12 @@ export async function updateRifa(id: string, prevState: any, formData: FormData)
     let imagePath = undefined;
 
     if (imageFile && imageFile.size > 0) {
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const filename = `${Date.now()}-${imageFile.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-        const uploadDir = join(process.cwd(), 'public', 'uploads');
-        await writeFile(join(uploadDir, filename), buffer);
-        imagePath = `/uploads/${filename}`;
+        try {
+            const uploadedUrl = await uploadImage(imageFile);
+            if (uploadedUrl) imagePath = uploadedUrl;
+        } catch (error) {
+            return { error: { imagen: ['Error al subir la imagen.'] } };
+        }
     }
 
     await prisma.rifa.update({
@@ -90,3 +109,6 @@ export async function deleteRifa(id: string, formData: FormData) {
     });
     revalidatePath('/admin/rifas');
 }
+
+
+
