@@ -64,6 +64,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                                 <span>{rifa._count.participantes} INSCRITOS</span>
                                 <span>{rifa.capacidad_maxima} CUPOS TOTALES</span>
                             </div>
+
                         </div>
                     </div>
 
