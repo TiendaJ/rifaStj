@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { googleLogin } from '@/app/actions/auth';
 
 export default function AuthCallbackPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const next = searchParams.get('next');
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -31,7 +33,7 @@ export default function AuthCallbackPage() {
                     const result = await googleLogin({ email, id, nombre });
 
                     if (result.success) {
-                        router.push('/mis-inscripciones');
+                        router.push(next || '/mis-inscripciones');
                     } else {
                         setError('Error al iniciar sesión en el servidor.');
                     }
@@ -51,7 +53,7 @@ export default function AuthCallbackPage() {
                         if (email) {
                             const result = await googleLogin({ email, id, nombre });
                             if (result.success) {
-                                router.push('/mis-inscripciones');
+                                router.push(next || '/mis-inscripciones');
                             }
                         }
                     }
@@ -62,7 +64,7 @@ export default function AuthCallbackPage() {
         };
 
         handleAuth();
-    }, [router]);
+    }, [router, next]);
 
     if (error) {
         return (
