@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 type Participante = {
     id?: string;
-    dni?: string;
-    telefono?: string;
+    dni?: string | null;
+    telefono?: string | null;
     nombre?: string | null;
     estado_cuenta?: string;
 };
@@ -24,7 +24,7 @@ export default function ParticipanteForm({ participante }: { participante?: Part
                         <label className="block text-sm font-medium text-gray-700 mb-1">DNI</label>
                         <input
                             name="dni"
-                            defaultValue={participante?.dni}
+                            defaultValue={participante?.dni || ''}
                             maxLength={8}
                             required
                             className="input-tech"
@@ -37,7 +37,7 @@ export default function ParticipanteForm({ participante }: { participante?: Part
                         <input
                             name="telefono"
                             type="tel"
-                            defaultValue={participante?.telefono}
+                            defaultValue={participante?.telefono || ''}
                             required
                             className="input-tech"
                         />
