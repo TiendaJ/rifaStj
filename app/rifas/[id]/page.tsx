@@ -45,17 +45,17 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
     const progress = (rifa._count.participantes / rifa.capacidad_maxima) * 100;
 
     return (
-        <div className="min-h-screen bg-white text-gray-900 p-8">
+        <div className="min-h-screen bg-white text-gray-900 p-4 md:p-8">
             <div className="max-w-4xl mx-auto">
-                <Link href="/" className="text-gray-500 hover:text-black mb-8 inline-flex items-center text-sm font-medium transition-colors">
+                <Link href="/" className="text-gray-500 hover:text-black mb-6 md:mb-8 inline-flex items-center text-sm font-medium transition-colors">
                     <span className="mr-2">←</span> Volver a Rifas
                 </Link>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div className="space-y-6 md:space-y-8">
                         <RifaDetailImage imagen={rifa.imagen} nombre={rifa.nombre} id={rifa.id} />
 
-                        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
                             <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-4">Estado del Sorteo</h3>
                             <div className="w-full bg-gray-100 rounded-full h-2 mb-4">
                                 <div
@@ -71,7 +71,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                         </div>
                     </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-6 md:space-y-8">
                         <div>
                             <div className="flex items-center gap-3 mb-4">
                                 <span className={`px-2 py-1 rounded-md text-xs font-bold border uppercase tracking-wide ${rifa.estado === 'activa' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'
@@ -80,8 +80,8 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                                 </span>
                                 <span className="text-xs text-gray-400 font-mono">ID: {rifa.id.slice(0, 8)}</span>
                             </div>
-                            <h1 className="text-4xl font-extrabold text-black mb-4 tracking-tight leading-tight">{rifa.nombre}</h1>
-                            <div className="text-3xl font-bold text-black mb-2">
+                            <h1 className="text-3xl md:text-4xl font-extrabold text-black mb-4 tracking-tight leading-tight">{rifa.nombre}</h1>
+                            <div className="text-2xl md:text-3xl font-bold text-black mb-2">
                                 S/{rifa.monto} <span className="text-lg font-normal text-gray-500">/ ticket</span>
                             </div>
                             {rifa.fecha_sorteo && (
@@ -92,7 +92,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                             )}
                         </div>
 
-                        <p className="text-gray-600 text-lg leading-relaxed border-t border-gray-100 pt-6">
+                        <p className="text-gray-600 text-base md:text-lg leading-relaxed border-t border-gray-100 pt-6">
                             {rifa.descripcion}
                         </p>
 
