@@ -28,8 +28,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
     const session = await getSession();
     const isClient = session?.role !== 'admin';
 
-    // Check if already subscribed and profile completion
-    let isSubscribed = false;
+    // Check profile completion
     let isProfileComplete = false;
 
     if (session && isClient) {
@@ -40,16 +39,6 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
         if (user) {
             isProfileComplete = !!(user.email && user.direccion && user.distrito && user.provincia && user.departamento && user.dni && user.telefono);
         }
-
-        const existing = await prisma.rifaParticipante.findUnique({
-            where: {
-                rifa_id_participante_id: {
-                    rifa_id: id,
-                    participante_id: session.id
-                }
-            }
-        });
-        if (existing) isSubscribed = true;
     }
 
     const progress = (rifa._count.participantes / rifa.capacidad_maxima) * 100;
@@ -116,17 +105,6 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                                 <div className="bg-yellow-50 p-4 rounded-lg text-yellow-800 border border-yellow-200 text-center text-sm font-medium">
                                     Modo Administrador: Inscripción deshabilitada.
                                 </div>
-                            ) : isSubscribed ? (
-                                <div className="bg-green-50 p-6 rounded-xl border border-green-200 text-center">
-                                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
-                                        ✓
-                                    </div>
-                                    <h3 className="text-lg font-bold text-green-800 mb-2">¡Inscripción Confirmada!</h3>
-                                    <p className="text-green-700 mb-4 text-sm">Tu participación ha sido registrada exitosamente.</p>
-                                    <Link href="/mis-inscripciones" className="text-green-700 hover:text-green-900 font-medium underline text-sm">
-                                        Ver mis inscripciones
-                                    </Link>
-                                </div>
                             ) : rifa.estado !== 'activa' ? (
                                 <div className="bg-gray-100 p-4 rounded-lg text-gray-500 text-center border border-gray-200 font-mono text-sm">
                                     SORTEO_NO_ACTIVO
@@ -136,7 +114,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                                     SOLD_OUT
                                 </div>
                             ) : (
-                                <InscripcionForm rifaId={rifa.id} isProfileComplete={isProfileComplete} />
+                                <InscripcionForm rifaId={rifa.id} isProfileComplete={isProfileComplete} precio={rifa.monto} />
                             )}
                         </div>
                     </div>

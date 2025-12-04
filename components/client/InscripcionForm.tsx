@@ -6,10 +6,11 @@ import { useActionState, useState } from 'react';
 import CompleteProfileModal from './CompleteProfileModal';
 import { useRouter } from 'next/navigation';
 
-export default function InscripcionForm({ rifaId, isProfileComplete }: { rifaId: string, isProfileComplete: boolean }) {
+export default function InscripcionForm({ rifaId, isProfileComplete, precio }: { rifaId: string, isProfileComplete: boolean, precio: number }) {
     const [state, action, pending] = useActionState(inscribirse, undefined);
     const [copied, setCopied] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [cantidad, setCantidad] = useState(1);
     const router = useRouter();
 
     const handleCopy = () => {
@@ -80,13 +81,32 @@ export default function InscripcionForm({ rifaId, isProfileComplete }: { rifaId:
                         <p className="font-semibold text-gray-700">Pasos:</p>
                         <ol className="list-decimal list-inside space-y-0.5 ml-1">
                             <li>Escanea QR o usa número.</li>
-                            <li>Paga monto exacto.</li>
+                            <li>Paga monto exacto: <span className="font-bold text-black">S/ {(precio * cantidad).toFixed(2)}</span></li>
                             <li>Sube captura.</li>
                         </ol>
                     </div>
                 </div>
 
                 <input type="hidden" name="rifa_id" value={rifaId} />
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Cantidad de Rifas
+                    </label>
+                    <input
+                        name="cantidad"
+                        type="number"
+                        min="1"
+                        value={cantidad}
+                        onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
+                        required
+                        className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none text-gray-900"
+                    />
+                    <div className="flex justify-between items-center mt-2 text-sm">
+                        <span className="text-gray-500">Precio unitario: S/ {precio.toFixed(2)}</span>
+                        <span className="font-bold text-gray-900">Total a pagar: S/ {(precio * cantidad).toFixed(2)}</span>
+                    </div>
+                </div>
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -113,7 +133,7 @@ export default function InscripcionForm({ rifaId, isProfileComplete }: { rifaId:
                     disabled={pending}
                     className="w-full py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-[1.02] text-lg active:scale-95"
                 >
-                    {pending ? 'Enviando...' : 'Confirmar Inscripción'}
+                    {pending ? 'Enviando...' : `Confirmar Inscripción (S/ ${(precio * cantidad).toFixed(2)})`}
                 </button>
             </form>
         </>

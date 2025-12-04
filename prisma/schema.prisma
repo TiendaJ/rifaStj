@@ -54,6 +54,4 @@ model RifaParticipante {
 
   rifa         Rifa         @relation(fields: [rifa_id], references: [id])
   participante Participante @relation(fields: [participante_id], references: [id])
-
-  @@unique([rifa_id, participante_id]) // Un participante solo puede inscribirse una vez por rifa (o quitar si se permiten múltiples tickets)
 }

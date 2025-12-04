@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 
 const inscripcionSchema = z.object({
     rifa_id: z.string(),
+    cantidad: z.coerce.number().min(1).default(1),
 });
 
 export async function inscribirse(prevState: any, formData: FormData) {
@@ -27,7 +28,7 @@ export async function inscribirse(prevState: any, formData: FormData) {
         return { error: validated.error.flatten().fieldErrors };
     }
 
-    const { rifa_id } = validated.data;
+    const { rifa_id, cantidad } = validated.data;
 
     // Check capacity
     const rifa = await prisma.rifa.findUnique({
@@ -45,22 +46,11 @@ export async function inscribirse(prevState: any, formData: FormData) {
 
     if (!rifa) return { error: { root: ["Rifa no encontrada"] } };
     if (rifa.estado !== 'activa') return { error: { root: ["Rifa no activa"] } };
-    if (rifa._count.participantes >= rifa.capacidad_maxima) {
-        return { error: { root: ["Cupos agotados"] } };
-    }
 
-    // Check existing inscription
-    const existing = await prisma.rifaParticipante.findUnique({
-        where: {
-            rifa_id_participante_id: {
-                rifa_id,
-                participante_id: session.id
-            }
-        }
-    });
-
-    if (existing) {
-        return { error: { root: ["Ya estás inscrito en esta rifa"] } };
+    // Check if there are enough spots
+    if (rifa._count.participantes + cantidad > rifa.capacidad_maxima) {
+        const disponibles = rifa.capacidad_maxima - rifa._count.participantes;
+        return { error: { root: [`Solo quedan ${disponibles} cupos disponibles`] } };
     }
 
     // Handle Comprobante
@@ -95,13 +85,21 @@ export async function inscribirse(prevState: any, formData: FormData) {
         return { error: { root: ["Debes subir el comprobante de pago"] } };
     }
 
-    await prisma.rifaParticipante.create({
-        data: {
-            rifa_id,
-            participante_id: session.id,
-            comprobante_imagen: comprobantePath,
-            estado: 'pendiente',
-        }
+    // Create multiple inscriptions
+    // We can use createMany if we didn't need to return IDs, but here we just need to create them.
+    // However, createMany is not supported for all databases in the same way with relations, 
+    // but for simple join table it should work.
+    // Actually, RifaParticipante has an ID @default(uuid()), so createMany is fine.
+
+    const inscriptions = Array.from({ length: cantidad }).map(() => ({
+        rifa_id,
+        participante_id: session.id,
+        comprobante_imagen: comprobantePath,
+        estado: 'pendiente',
+    }));
+
+    await prisma.rifaParticipante.createMany({
+        data: inscriptions
     });
 
     revalidatePath('/mis-inscripciones');
