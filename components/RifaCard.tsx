@@ -63,37 +63,42 @@ export default function RifaCard({ rifa }: RifaCardProps) {
     const handleParticipate = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        if (isLoadingAuth) return;
+
         setIsLoadingAuth(true);
 
-        const isLoggedIn = await checkAuth();
+        try {
+            const isLoggedIn = await checkAuth();
+            console.log("Auth check result:", isLoggedIn);
 
-        if (isLoggedIn) {
-            window.location.href = `/rifas/${rifa.id}`;
-        } else {
-            // Save next URL to localStorage to avoid polluting the redirect URL which can cause Supabase to reject it
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('auth_next', `/rifas/${rifa.id}`);
-            }
+            if (isLoggedIn) {
+                window.location.href = `/rifas/${rifa.id}`;
+            } else {
+                // Save next URL to localStorage to avoid polluting the redirect URL which can cause Supabase to reject it
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('auth_next', `/rifas/${rifa.id}`);
+                }
 
-            const supabase = createClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-            );
+                const supabase = createClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                );
 
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent',
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: `${window.location.origin}/auth/callback`,
+                        queryParams: {
+                            access_type: 'offline',
+                            prompt: 'consent',
+                        },
                     },
-                },
-            });
-            if (error) {
-                console.error("Auth error:", error);
-                setIsLoadingAuth(false);
+                });
+                if (error) throw error;
             }
+        } catch (error) {
+            console.error("Participation error:", error);
+            setIsLoadingAuth(false);
         }
     };
 
