@@ -14,6 +14,7 @@ export default async function ParticipantesListPage({
             { dni: { contains: q } },
             { telefono: { contains: q } },
             { nombre: { contains: q } },
+            { email: { contains: q } },
         ]
     } : {};
 
@@ -52,6 +53,8 @@ export default async function ParticipantesListPage({
                             <th className="p-4 font-medium text-xs uppercase tracking-wider">DNI</th>
                             <th className="p-4 font-medium text-xs uppercase tracking-wider">Nombre</th>
                             <th className="p-4 font-medium text-xs uppercase tracking-wider">Teléfono</th>
+                            <th className="p-4 font-medium text-xs uppercase tracking-wider">Email</th>
+                            <th className="p-4 font-medium text-xs uppercase tracking-wider">Ubicación</th>
                             <th className="p-4 font-medium text-xs uppercase tracking-wider">Estado</th>
                             <th className="p-4 font-medium text-xs uppercase tracking-wider">Acciones</th>
                         </tr>
@@ -62,6 +65,10 @@ export default async function ParticipantesListPage({
                                 <td className="p-4 font-mono text-sm text-gray-600">{p.dni}</td>
                                 <td className="p-4 text-gray-900 font-medium">{p.nombre || '-'}</td>
                                 <td className="p-4 text-gray-500 text-sm">{p.telefono}</td>
+                                <td className="p-4 text-gray-500 text-sm">{p.email || '-'}</td>
+                                <td className="p-4 text-gray-500 text-sm">
+                                    {p.distrito ? `${p.distrito}, ${p.provincia}` : '-'}
+                                </td>
                                 <td className="p-4">
                                     <span className={`px-2 py-1 rounded-full text-xs font-bold border ${p.estado_cuenta === 'activo' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'
                                         }`}>
