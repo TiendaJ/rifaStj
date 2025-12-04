@@ -32,6 +32,10 @@ model Participante {
   nombre        String?
   password      String?
   estado_cuenta String   @default("activo") // activo, bloqueado
+  direccion     String?
+  departamento  String?
+  provincia     String?
+  distrito      String?
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 

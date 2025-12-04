@@ -3,13 +3,19 @@
 import { createParticipante, updateParticipante } from '@/app/actions/participante';
 import { useActionState } from 'react';
 import Link from 'next/link';
+import LocationSearcher from './LocationSearcher';
 
 type Participante = {
     id?: string;
     dni?: string | null;
     telefono?: string | null;
+    email?: string | null;
     nombre?: string | null;
     estado_cuenta?: string;
+    direccion?: string | null;
+    departamento?: string | null;
+    provincia?: string | null;
+    distrito?: string | null;
 };
 
 export default function ParticipanteForm({ participante }: { participante?: Participante }) {
@@ -19,7 +25,7 @@ export default function ParticipanteForm({ participante }: { participante?: Part
     return (
         <form action={action} className="space-y-6 max-w-2xl bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
             <div className="grid grid-cols-1 gap-6">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">DNI</label>
                         <input
@@ -46,6 +52,18 @@ export default function ParticipanteForm({ participante }: { participante?: Part
                 </div>
 
                 <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email (Opcional)</label>
+                    <input
+                        name="email"
+                        type="email"
+                        defaultValue={participante?.email || ''}
+                        className="input-tech"
+                        placeholder="ejemplo@correo.com"
+                    />
+                    {state?.error && 'email' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.email?.[0]}</p>}
+                </div>
+
+                <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                     <input
                         name="nombre"
@@ -53,6 +71,23 @@ export default function ParticipanteForm({ participante }: { participante?: Part
                         className="input-tech"
                     />
                     {state?.error && 'nombre' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.nombre?.[0]}</p>}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <LocationSearcher
+                        defaultDep={participante?.departamento}
+                        defaultProv={participante?.provincia}
+                        defaultDist={participante?.distrito}
+                    />
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Dirección Exacta</label>
+                        <input
+                            name="direccion"
+                            defaultValue={participante?.direccion || ''}
+                            className="input-tech"
+                            placeholder="Av. Principal 123..."
+                        />
+                    </div>
                 </div>
 
                 <div>

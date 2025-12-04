@@ -9,9 +9,14 @@ import bcrypt from 'bcryptjs';
 const participanteSchema = z.object({
     dni: z.string().length(8, "DNI debe tener 8 dígitos"),
     telefono: z.string().min(9, "Teléfono inválido"),
+    email: z.string().email("Email inválido").optional().or(z.literal('')),
     nombre: z.string().optional(),
     password: z.string().optional(), // Optional on update
     estado_cuenta: z.enum(['activo', 'bloqueado']),
+    direccion: z.string().optional(),
+    departamento: z.string().optional(),
+    provincia: z.string().optional(),
+    distrito: z.string().optional(),
 });
 
 export async function createParticipante(prevState: any, formData: FormData) {
@@ -28,7 +33,7 @@ export async function createParticipante(prevState: any, formData: FormData) {
         return { error: validated.error.flatten().fieldErrors };
     }
 
-    const { dni, telefono, nombre, password, estado_cuenta } = validated.data;
+    const { dni, telefono, email, nombre, password, estado_cuenta, direccion, departamento, provincia, distrito } = validated.data;
 
     // Check duplicates
     const existing = await prisma.participante.findFirst({
@@ -45,9 +50,14 @@ export async function createParticipante(prevState: any, formData: FormData) {
         data: {
             dni,
             telefono,
+            email: email || null,
             nombre,
             password: hashedPassword,
             estado_cuenta,
+            direccion,
+            departamento,
+            provincia,
+            distrito,
         }
     });
 
@@ -63,13 +73,18 @@ export async function updateParticipante(id: string, prevState: any, formData: F
         return { error: validated.error.flatten().fieldErrors };
     }
 
-    const { dni, telefono, nombre, password, estado_cuenta } = validated.data;
+    const { dni, telefono, email, nombre, password, estado_cuenta, direccion, departamento, provincia, distrito } = validated.data;
 
     const dataToUpdate: any = {
         dni,
         telefono,
+        email: email || null,
         nombre,
         estado_cuenta,
+        direccion,
+        departamento,
+        provincia,
+        distrito,
     };
 
     if (password) {
