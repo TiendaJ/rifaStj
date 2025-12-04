@@ -7,10 +7,10 @@ export default function InscripcionForm({ rifaId }: { rifaId: string }) {
     const [state, action, pending] = useActionState(inscribirse, undefined);
 
     return (
-        <form action={action} className="space-y-6 md:bg-white md:p-6 md:rounded-xl md:border md:border-gray-200 md:shadow-sm">
-            <h3 className="text-lg font-bold text-gray-900 mb-3 tracking-tight">Inscribirse</h3>
+        <form action={action} className="space-y-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-3 tracking-tight">METODO DE PAGO</h3>
 
-            <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 mb-4">
+            <div className="mb-4">
                 <div className="flex flex-row items-center gap-4">
                     <div className="flex-shrink-0">
                         <img
