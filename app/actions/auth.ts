@@ -52,7 +52,13 @@ export async function googleLogin(userData: { email: string; id: string; nombre:
     };
 
     const token = await encrypt(sessionPayload);
-    (await cookies()).set('session', token, { expires, httpOnly: true, path: '/' });
+    (await cookies()).set('session', token, {
+        expires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/'
+    });
 
     return { success: true };
 }
@@ -123,7 +129,13 @@ export async function login(prevState: any, formData: FormData) {
 
     const token = await encrypt(sessionData);
 
-    (await cookies()).set('session', token, { expires, httpOnly: true });
+    (await cookies()).set('session', token, {
+        expires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/'
+    });
 
     // Redirect based on role
     if (sessionData.role === 'admin') {
