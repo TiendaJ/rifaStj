@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Share2, Play, X, Copy, Check } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
@@ -25,10 +25,6 @@ export default function RifaCard({ rifa }: RifaCardProps) {
     const [copied, setCopied] = useState(false);
     const router = useRouter();
     const [isLoadingAuth, setIsLoadingAuth] = useState(false);
-
-    useEffect(() => {
-        console.log("RifaCard mounted for", rifa.id);
-    }, [rifa.id]);
 
     const handleShare = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -65,7 +61,6 @@ export default function RifaCard({ rifa }: RifaCardProps) {
 
 
     const handleParticipate = async (e: React.MouseEvent) => {
-        alert("Click detected!");
         e.preventDefault();
         e.stopPropagation();
         if (isLoadingAuth) return;
@@ -172,9 +167,9 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                     <button
                         onClick={handleParticipate}
                         disabled={isLoadingAuth}
-                        className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2.5 rounded-md font-bold text-sm uppercase tracking-wide hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg transform group-hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed border-4 border-red-500"
+                        className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2.5 rounded-md font-bold text-sm uppercase tracking-wide hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg transform group-hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                        {isLoadingAuth ? 'Redirigiendo...' : 'DEBUG: CLICK ME'}
+                        {isLoadingAuth ? 'Redirigiendo...' : 'Participar Ahora'}
                     </button>
                 </div>
             </div>
