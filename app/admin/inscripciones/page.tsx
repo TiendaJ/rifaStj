@@ -12,6 +12,10 @@ export default async function AdminInscripcionesPage() {
         orderBy: { created_at: 'desc' },
     });
 
+    const rifas = await prisma.rifa.findMany({
+        orderBy: { created_at: 'desc' },
+    });
+
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -21,7 +25,7 @@ export default async function AdminInscripcionesPage() {
                 </div>
             </div>
 
-            <InscripcionesTable inscripciones={inscripciones} />
+            <InscripcionesTable inscripciones={inscripciones} rifas={rifas} />
         </div>
     );
 }

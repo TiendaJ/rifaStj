@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { getSession } from "@/lib/auth";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import "./globals.css";
 
 // Inter font for body text (high‑performance sans‑serif)
@@ -38,6 +39,7 @@ export default async function RootLayout({
           {children}
         </main>
         <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );
