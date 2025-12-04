@@ -68,7 +68,7 @@ export default function RifaCard({ rifa }: RifaCardProps) {
         const isLoggedIn = await checkAuth();
 
         if (isLoggedIn) {
-            router.push(`/rifas/${rifa.id}`);
+            window.location.href = `/rifas/${rifa.id}`;
         } else {
             // Save next URL to localStorage to avoid polluting the redirect URL which can cause Supabase to reject it
             if (typeof window !== 'undefined') {
