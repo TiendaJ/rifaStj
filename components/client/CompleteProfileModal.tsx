@@ -59,16 +59,7 @@ export default function CompleteProfileModal({
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email (Opcional si ya está registrado)</label>
-                        <input
-                            name="email"
-                            type="email"
-                            className="input-tech w-full"
-                            placeholder="tu@email.com"
-                        />
-                        {state?.error && 'email' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.email?.[0]}</p>}
-                    </div>
+
 
                     <div className="space-y-4">
                         <LocationSearcher />
