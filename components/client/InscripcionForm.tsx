@@ -57,16 +57,15 @@ export default function InscripcionForm({ rifaId, isProfileComplete, precio }: {
                 </button>
             </div>
         </div >
-                    </div >
 
-        <div className="text-xs text-gray-600 space-y-1 border-t border-gray-200 pt-2 mt-2">
-            <p className="font-semibold text-gray-700">Pasos:</p>
-            <ol className="list-decimal list-inside space-y-0.5 ml-1">
-                <li>Escanea QR o usa número.</li>
-                <li>Paga monto exacto: <span className="font-bold text-black">S/ {(precio * (Number(cantidad) || 1)).toFixed(2)}</span></li>
-                <li>Sube captura.</li>
-            </ol>
-        </div>
+            <div className="text-xs text-gray-600 space-y-1 border-t border-gray-200 pt-2 mt-2">
+                <p className="font-semibold text-gray-700">Pasos:</p>
+                <ol className="list-decimal list-inside space-y-0.5 ml-1">
+                    <li>Escanea QR o usa número.</li>
+                    <li>Paga monto exacto: <span className="font-bold text-black">S/ {(precio * (Number(cantidad) || 1)).toFixed(2)}</span></li>
+                    <li>Sube captura.</li>
+                </ol>
+            </div>
                 </div >
 
                 <input type="hidden" name="rifa_id" value={rifaId} />
