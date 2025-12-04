@@ -20,12 +20,12 @@ export default async function HomePage() {
   return (
     <div className="space-y-12 md:space-y-16 px-4 md:px-0">
       {/* Hero section - Centered, high contrast, minimal */}
-      <section className="max-w-4xl mx-auto text-center pt-8 md:pt-12">
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-4 md:mb-6 tracking-tighter text-black">
-          RifaManía
+      <section className="max-w-4xl mx-auto text-center pt-4 md:pt-6">
+        <h1 className="text-3xl md:text-5xl font-extrabold mb-2 md:mb-4 tracking-tighter text-black">
+          Jshop
         </h1>
-        <p className="text-lg md:text-xl text-gray-500 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-          La plataforma de rifas más avanzada. Participa en sorteos exclusivos con una experiencia de usuario inigualable.
+        <p className="text-base md:text-lg text-gray-500 mb-4 md:mb-6 max-w-2xl mx-auto leading-relaxed">
+          Las rifas tienen cupos limitados según el valor del premio. Participas realizando el pago. Recibirás por WhatsApp el enlace de la transmisión.
         </p>
 
       </section>

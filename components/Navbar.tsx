@@ -18,9 +18,9 @@ export function Navbar({ session }: NavbarProps) {
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
                     <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
-                        <span className="text-sm">R</span>
+                        <span className="text-sm">J</span>
                     </div>
-                    <span>RifaManía</span>
+                    <span>Jshop</span>
                 </Link>
 
                 {/* Desktop Nav */}
