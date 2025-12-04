@@ -8,7 +8,7 @@ import { z } from 'zod';
 const profileSchema = z.object({
     dni: z.string().length(8, "DNI debe tener 8 dígitos"),
     telefono: z.string().min(9, "Teléfono inválido"),
-    email: z.string().email("Email inválido"),
+    email: z.string().email("Email inválido").optional().or(z.literal('')),
     direccion: z.string().min(5, "Dirección muy corta"),
     departamento: z.string().min(1, "Departamento requerido"),
     provincia: z.string().min(1, "Provincia requerida"),
@@ -30,18 +30,23 @@ export async function updateProfile(prevState: any, formData: FormData) {
 
     const { dni, telefono, email, direccion, departamento, provincia, distrito } = validated.data;
 
+    const dataToUpdate: any = {
+        dni,
+        telefono,
+        direccion,
+        departamento,
+        provincia,
+        distrito,
+    };
+
+    if (email) {
+        dataToUpdate.email = email;
+    }
+
     try {
         await prisma.participante.update({
             where: { id: session.id },
-            data: {
-                dni,
-                telefono,
-                email,
-                direccion,
-                departamento,
-                provincia,
-                distrito,
-            }
+            data: dataToUpdate
         });
     } catch (error) {
         return { error: { root: ["Error al actualizar perfil"] } };

@@ -60,11 +60,10 @@ export default function CompleteProfileModal({
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email (Opcional si ya está registrado)</label>
                         <input
                             name="email"
                             type="email"
-                            required
                             className="input-tech w-full"
                             placeholder="tu@email.com"
                         />
