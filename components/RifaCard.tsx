@@ -68,8 +68,18 @@ export default function RifaCard({ rifa }: RifaCardProps) {
         setIsLoadingAuth(true);
 
         try {
-            const isLoggedIn = await checkAuth();
-            console.log("Auth check result:", isLoggedIn);
+            if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+                throw new Error("Falta configuración de Supabase (URL)");
+            }
+
+            let isLoggedIn = false;
+            try {
+                isLoggedIn = await checkAuth();
+                console.log("Auth check result:", isLoggedIn);
+            } catch (err) {
+                console.error("CheckAuth failed, assuming not logged in:", err);
+                isLoggedIn = false;
+            }
 
             if (isLoggedIn) {
                 window.location.href = `/rifas/${rifa.id}`;
@@ -96,8 +106,9 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                 });
                 if (error) throw error;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Participation error:", error);
+            alert(`Error al iniciar sesión: ${error.message || error}`);
             setIsLoadingAuth(false);
         }
     };
