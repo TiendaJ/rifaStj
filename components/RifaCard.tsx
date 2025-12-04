@@ -61,6 +61,7 @@ export default function RifaCard({ rifa }: RifaCardProps) {
 
 
     const handleParticipate = async (e: React.MouseEvent) => {
+        alert("Click detected!");
         e.preventDefault();
         e.stopPropagation();
         if (isLoadingAuth) return;
