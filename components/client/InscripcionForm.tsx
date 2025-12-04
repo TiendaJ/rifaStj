@@ -10,6 +10,36 @@ export default function InscripcionForm({ rifaId }: { rifaId: string }) {
         <form action={action} className="space-y-6 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h3 className="text-xl font-bold text-gray-900 mb-4 tracking-tight">Inscribirse</h3>
 
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
+                <div className="text-center mb-4">
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Pagos vía Yape / Plin</p>
+                    <div className="flex justify-center items-center gap-4 mb-3">
+                        {/* Placeholder for Yape/Plin Icons - You can replace these with actual Image tags */}
+                        <div className="bg-purple-600 text-white px-3 py-1 rounded font-bold text-xs">Yape</div>
+                        <div className="bg-cyan-500 text-white px-3 py-1 rounded font-bold text-xs">Plin</div>
+                    </div>
+                    <div className="flex justify-center mb-3">
+                        <img
+                            src="/qr-placeholder.svg"
+                            alt="QR Yape/Plin"
+                            className="w-48 h-48 object-contain border-2 border-white shadow-sm rounded-lg"
+                        />
+                    </div>
+                    <p className="font-bold text-lg text-gray-800">Jshop S.A.C.</p>
+                    <p className="text-sm text-gray-500 font-mono">999-999-999</p>
+                </div>
+
+                <div className="text-sm text-gray-600 space-y-2 border-t border-gray-200 pt-3">
+                    <p className="font-semibold text-gray-700">Pasos para inscribirse:</p>
+                    <ol className="list-decimal list-inside space-y-1 ml-1">
+                        <li>Escanea el QR o usa el número.</li>
+                        <li>Realiza el pago del monto exacto.</li>
+                        <li>Toma una captura del comprobante.</li>
+                        <li>Sube la captura en el campo de abajo.</li>
+                    </ol>
+                </div>
+            </div>
+
             <input type="hidden" name="rifa_id" value={rifaId} />
 
             <div>
