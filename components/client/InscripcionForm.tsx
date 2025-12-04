@@ -7,7 +7,7 @@ export default function InscripcionForm({ rifaId }: { rifaId: string }) {
     const [state, action, pending] = useActionState(inscribirse, undefined);
 
     return (
-        <form action={action} className="space-y-6 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <form action={action} className="space-y-6 md:bg-white md:p-6 md:rounded-xl md:border md:border-gray-200 md:shadow-sm">
             <h3 className="text-lg font-bold text-gray-900 mb-3 tracking-tight">Inscribirse</h3>
 
             <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 mb-4">
