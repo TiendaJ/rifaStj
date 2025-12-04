@@ -30,6 +30,8 @@ export default function TerminosPage() {
                         <li>Los pagos deben realizarse a través de los medios autorizados.</li>
                         <li>Los tickets son intransferibles una vez registrados.</li>
                         <li>La fecha del sorteo puede estar sujeta a cambios por fuerza mayor.</li>
+                        <li>El método de sorteo será determinado por los organizadores según lo consideren más conveniente.</li>
+                        <li>Es requisito indispensable que el ganador permita tomarse una foto recibiendo el premio.</li>
                     </ul>
                 </section>
 
