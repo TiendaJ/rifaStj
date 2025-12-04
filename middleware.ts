@@ -3,13 +3,9 @@ import type { NextRequest } from 'next/server';
 import { updateSession, decrypt } from '@/lib/auth';
 
 export async function middleware(request: NextRequest) {
-    // Update session expiration
-    await updateSession(request);
-
+    const path = request.nextUrl.pathname;
     const session = request.cookies.get('session')?.value;
     const payload = session ? await decrypt(session) : null;
-
-    const path = request.nextUrl.pathname;
 
     // Protected Admin Routes
     if (path.startsWith('/admin')) {
@@ -36,7 +32,8 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    return NextResponse.next();
+    // Update session expiration (only if not redirecting)
+    return await updateSession(request) || NextResponse.next();
 }
 
 export const config = {
