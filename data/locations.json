@@ -1,0 +1,177 @@
+[
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Tarapoto"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Morales"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Banda de Shilcayo"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Cacatachi"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Juan Guerra"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "La Banda de Shilcayo"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Shapaja"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Chazuta"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "San Martin",
+        "dist": "Sauce"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "Moyobamba",
+        "dist": "Moyobamba"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "Moyobamba",
+        "dist": "Soritor"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "Rioja",
+        "dist": "Rioja"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "Rioja",
+        "dist": "Nueva Cajamarca"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "Lamas",
+        "dist": "Lamas"
+    },
+    {
+        "dep": "San Martin",
+        "prov": "Lamas",
+        "dist": "Tabalosos"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "Miraflores"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "San Isidro"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "Santiago de Surco"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "La Molina"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "San Borja"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "Lima"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "San Miguel"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "Magdalena del Mar"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "Jesus Maria"
+    },
+    {
+        "dep": "Lima",
+        "prov": "Lima",
+        "dist": "Lince"
+    },
+    {
+        "dep": "Arequipa",
+        "prov": "Arequipa",
+        "dist": "Arequipa"
+    },
+    {
+        "dep": "Arequipa",
+        "prov": "Arequipa",
+        "dist": "Yanahuara"
+    },
+    {
+        "dep": "Cusco",
+        "prov": "Cusco",
+        "dist": "Cusco"
+    },
+    {
+        "dep": "Cusco",
+        "prov": "Cusco",
+        "dist": "Wanchaq"
+    },
+    {
+        "dep": "La Libertad",
+        "prov": "Trujillo",
+        "dist": "Trujillo"
+    },
+    {
+        "dep": "La Libertad",
+        "prov": "Trujillo",
+        "dist": "Victor Larco Herrera"
+    },
+    {
+        "dep": "Lambayeque",
+        "prov": "Chiclayo",
+        "dist": "Chiclayo"
+    },
+    {
+        "dep": "Piura",
+        "prov": "Piura",
+        "dist": "Piura"
+    },
+    {
+        "dep": "Loreto",
+        "prov": "Maynas",
+        "dist": "Iquitos"
+    },
+    {
+        "dep": "Ucayali",
+        "prov": "Coronel Portillo",
+        "dist": "Pucallpa"
+    }
+]

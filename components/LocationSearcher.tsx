@@ -2,30 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-// Simplified list of locations for demonstration. 
-// In a real app, this should fetch from an API or a larger JSON file.
-const LOCATIONS = [
-    { dep: 'San Martin', prov: 'San Martin', dist: 'Tarapoto' },
-    { dep: 'San Martin', prov: 'San Martin', dist: 'Morales' },
-    { dep: 'San Martin', prov: 'San Martin', dist: 'Banda de Shilcayo' },
-    { dep: 'San Martin', prov: 'San Martin', dist: 'Cacatachi' },
-    { dep: 'San Martin', prov: 'San Martin', dist: 'Juan Guerra' },
-    { dep: 'San Martin', prov: 'Moyobamba', dist: 'Moyobamba' },
-    { dep: 'San Martin', prov: 'Rioja', dist: 'Rioja' },
-    { dep: 'Lima', prov: 'Lima', dist: 'Miraflores' },
-    { dep: 'Lima', prov: 'Lima', dist: 'San Isidro' },
-    { dep: 'Lima', prov: 'Lima', dist: 'Santiago de Surco' },
-    { dep: 'Lima', prov: 'Lima', dist: 'La Molina' },
-    { dep: 'Lima', prov: 'Lima', dist: 'San Borja' },
-    { dep: 'Lima', prov: 'Lima', dist: 'Lima' },
-    { dep: 'Arequipa', prov: 'Arequipa', dist: 'Arequipa' },
-    { dep: 'Cusco', prov: 'Cusco', dist: 'Cusco' },
-    { dep: 'La Libertad', prov: 'Trujillo', dist: 'Trujillo' },
-    { dep: 'Lambayeque', prov: 'Chiclayo', dist: 'Chiclayo' },
-    { dep: 'Piura', prov: 'Piura', dist: 'Piura' },
-    { dep: 'Loreto', prov: 'Maynas', dist: 'Iquitos' },
-    { dep: 'Ucayali', prov: 'Coronel Portillo', dist: 'Pucallpa' },
-];
+import locationsData from '@/data/locations.json';
+
+const LOCATIONS = locationsData as Location[];
 
 type Location = {
     dep: string;
