@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Share2, Play, X, Copy, Check } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
+import { checkAuth } from '@/app/actions/auth';
 
 interface RifaCardProps {
     rifa: {
@@ -57,25 +58,27 @@ export default function RifaCard({ rifa }: RifaCardProps) {
         setIsVideoOpen(false);
     };
 
+
+
     const handleParticipate = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setIsLoadingAuth(true);
 
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
+        const isLoggedIn = await checkAuth();
 
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (session) {
+        if (isLoggedIn) {
             router.push(`/rifas/${rifa.id}`);
         } else {
             // Save next URL to localStorage to avoid polluting the redirect URL which can cause Supabase to reject it
             if (typeof window !== 'undefined') {
                 localStorage.setItem('auth_next', `/rifas/${rifa.id}`);
             }
+
+            const supabase = createClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            );
 
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
