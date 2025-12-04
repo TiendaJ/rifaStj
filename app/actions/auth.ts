@@ -3,9 +3,64 @@
 import { z } from 'zod';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
-import { encrypt } from '@/lib/auth';
+import { encrypt, getSession } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+
+// ... (keep existing code)
+
+export async function googleLogin(userData: { email: string; id: string; nombre: string }) {
+    const { email, id: supabase_id, nombre } = userData;
+
+    if (!email) return { error: "No email provided" };
+
+    // Upsert user in Prisma
+    let participante = await prisma.participante.findUnique({
+        where: { email },
+    });
+
+    if (!participante) {
+        participante = await prisma.participante.findUnique({
+            where: { supabase_id },
+        });
+    }
+
+    if (!participante) {
+        participante = await prisma.participante.create({
+            data: {
+                email,
+                supabase_id,
+                nombre,
+                estado_cuenta: 'activo',
+            },
+        });
+    } else {
+        if (!participante.supabase_id) {
+            await prisma.participante.update({
+                where: { id: participante.id },
+                data: { supabase_id },
+            });
+        }
+    }
+
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const sessionPayload = {
+        id: participante.id,
+        email: participante.email,
+        role: 'user',
+        expires,
+    };
+
+    const token = await encrypt(sessionPayload);
+    (await cookies()).set('session', token, { expires, httpOnly: true, path: '/' });
+
+    return { success: true };
+}
+
+export async function checkAuth() {
+    const session = await getSession();
+    return !!session;
+}
 
 const loginSchema = z.object({
     identifier: z.string().min(1, "DNI o Teléfono es requerido"),
@@ -114,53 +169,7 @@ export async function register(prevState: any, formData: FormData) {
     redirect('/login?registered=true');
 }
 
-export async function googleLogin(userData: { email: string; id: string; nombre: string }) {
-    const { email, id: supabase_id, nombre } = userData;
 
-    if (!email) return { error: "No email provided" };
-
-    // Upsert user in Prisma
-    let participante = await prisma.participante.findUnique({
-        where: { email },
-    });
-
-    if (!participante) {
-        participante = await prisma.participante.findUnique({
-            where: { supabase_id },
-        });
-    }
-
-    if (!participante) {
-        participante = await prisma.participante.create({
-            data: {
-                email,
-                supabase_id,
-                nombre,
-                estado_cuenta: 'activo',
-            },
-        });
-    } else {
-        if (!participante.supabase_id) {
-            await prisma.participante.update({
-                where: { id: participante.id },
-                data: { supabase_id },
-            });
-        }
-    }
-
-    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
-    const sessionPayload = {
-        id: participante.id,
-        email: participante.email,
-        role: 'user',
-        expires,
-    };
-
-    const token = await encrypt(sessionPayload);
-    (await cookies()).set('session', token, { expires, httpOnly: true });
-
-    return { success: true };
-}
 
 export async function logout() {
     (await cookies()).delete('session');
