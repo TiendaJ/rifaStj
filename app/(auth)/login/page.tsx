@@ -70,12 +70,7 @@ export default function LoginPage() {
                 </button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-gray-500">
-                ¿No tienes cuenta?{' '}
-                <Link href="/register" className="text-black font-medium hover:underline">
-                    Regístrate aquí
-                </Link>
-            </div>
+
         </div>
     );
 }

@@ -26,9 +26,7 @@ export default async function PublicRifasPage() {
                         <Link href="/login" className="text-gray-500 hover:text-black transition-colors font-medium text-sm">
                             Iniciar Sesión
                         </Link>
-                        <Link href="/register" className="btn-primary">
-                            Registrarse
-                        </Link>
+
                     </div>
                 </header>
 
