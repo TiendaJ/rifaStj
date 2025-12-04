@@ -97,4 +97,4 @@ export default function InscripcionForm({ rifaId }: { rifaId: string }) {
         </form>
     );
 }
-// Force Vercel deployment
+// Force Vercel deployment update
