@@ -3,7 +3,7 @@
 import { createParticipante, updateParticipante } from '@/app/actions/participante';
 import { useActionState } from 'react';
 import Link from 'next/link';
-import LocationSearcher from './LocationSearcher';
+import LocationSearcher from '@/components/LocationSearcher';
 
 type Participante = {
     id?: string;

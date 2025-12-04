@@ -28,9 +28,19 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
     const session = await getSession();
     const isClient = session?.role !== 'admin';
 
-    // Check if already subscribed
+    // Check if already subscribed and profile completion
     let isSubscribed = false;
+    let isProfileComplete = false;
+
     if (session && isClient) {
+        const user = await prisma.participante.findUnique({
+            where: { id: session.id }
+        });
+
+        if (user) {
+            isProfileComplete = !!(user.email && user.direccion && user.distrito && user.provincia && user.departamento);
+        }
+
         const existing = await prisma.rifaParticipante.findUnique({
             where: {
                 rifa_id_participante_id: {
@@ -126,7 +136,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                                     SOLD_OUT
                                 </div>
                             ) : (
-                                <InscripcionForm rifaId={rifa.id} />
+                                <InscripcionForm rifaId={rifa.id} isProfileComplete={isProfileComplete} />
                             )}
                         </div>
                     </div>
