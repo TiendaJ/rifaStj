@@ -4,6 +4,9 @@ import InscripcionForm from '@/components/client/InscripcionForm';
 import { getSession } from '@/lib/auth';
 import Link from 'next/link';
 import RifaDetailImage from '@/components/RifaDetailImage';
+import RifaLoginPrompt from '@/components/RifaLoginPrompt';
+
+export const dynamic = 'force-dynamic';
 
 export default async function RifaDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -95,12 +98,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
 
                         <div className="pt-2">
                             {!session ? (
-                                <div className="bg-gray-50 p-8 rounded-xl border border-gray-200 text-center">
-                                    <p className="text-gray-600 mb-6">Inicia sesión para participar en este sorteo exclusivo.</p>
-                                    <Link href="/login" className="btn-primary inline-block px-8">
-                                        Iniciar Sesión
-                                    </Link>
-                                </div>
+                                <RifaLoginPrompt rifaId={rifa.id} />
                             ) : !isClient ? (
                                 <div className="bg-yellow-50 p-4 rounded-lg text-yellow-800 border border-yellow-200 text-center text-sm font-medium">
                                     Modo Administrador: Inscripción deshabilitada.
