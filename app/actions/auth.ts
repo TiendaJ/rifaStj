@@ -55,8 +55,6 @@ export async function googleLogin(userData: { email: string; id: string; nombre:
     (await cookies()).set('session', token, {
         expires,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
         path: '/'
     });
 
@@ -132,8 +130,6 @@ export async function login(prevState: any, formData: FormData) {
     (await cookies()).set('session', token, {
         expires,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
         path: '/'
     });
 
