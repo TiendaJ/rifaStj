@@ -1,30 +1,30 @@
 import Link from "next/link";
-import { Ticket, CreditCard, Gift, Search, ArrowRight } from "lucide-react";
+import { Ticket, CreditCard, Gift, Search, ArrowRight, Calendar } from "lucide-react";
 
 export default function ComoFuncionaPage() {
     const steps = [
         {
             icon: <Search className="w-6 h-6 text-white" />,
             title: "Explora",
-            description: "Navega por nuestro catálogo exclusivo de rifas. Tecnología, experiencias y premios que te sorprenderán.",
+            description: "Buscas un producto que te interese en nuestro catálogo de rifas exclusivas.",
             gradient: "from-pink-500 via-red-500 to-yellow-500"
         },
         {
             icon: <Ticket className="w-6 h-6 text-white" />,
             title: "Selecciona",
-            description: "Elige tus números de la suerte. Usa nuestra herramienta de selección aleatoria si te sientes con suerte.",
+            description: "Selecciona la rifa y la cantidad de tickets que deseas adquirir.",
             gradient: "from-blue-400 via-indigo-500 to-purple-500"
         },
         {
             icon: <CreditCard className="w-6 h-6 text-white" />,
             title: "Participa",
-            description: "Pago seguro y rápido con Yape, Plin o transferencia. Tu seguridad es nuestra prioridad absoluta.",
+            description: "Realizas el pago de forma segura y rápida con tus métodos favoritos.",
             gradient: "from-green-400 via-emerald-500 to-teal-500"
         },
         {
-            icon: <Gift className="w-6 h-6 text-white" />,
-            title: "Gana",
-            description: "Recibe tu ticket digital al instante. ¡Sigue el sorteo en vivo y prepárate para celebrar!",
+            icon: <Calendar className="w-6 h-6 text-white" />,
+            title: "Espera",
+            description: "Esperas el día que se realizará la rifa. Te avisaremos a tu número de teléfono si eres el ganador.",
             gradient: "from-orange-400 via-amber-500 to-yellow-500"
         }
     ];
@@ -80,13 +80,21 @@ export default function ComoFuncionaPage() {
                     <p className="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
                         Únete a miles de ganadores que ya disfrutan de sus premios. Tu momento es ahora.
                     </p>
-                    <Link
-                        href="/"
-                        className="group inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-black rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-lg"
-                    >
-                        Ver Rifas Disponibles
-                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    <div className="flex flex-col items-center gap-6">
+                        <Link
+                            href="/"
+                            className="group inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-black rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-lg"
+                        >
+                            Ver Rifas Disponibles
+                            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <Link
+                            href="/terminos"
+                            className="text-sm text-gray-500 hover:text-black underline underline-offset-4 transition-colors"
+                        >
+                            Ver Términos y Condiciones
+                        </Link>
+                    </div>
                 </div>
             </section>
         </div>
