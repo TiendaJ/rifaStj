@@ -70,7 +70,7 @@ export default function RifaLoginPrompt({ rifaId }: RifaLoginPromptProps) {
                         />
                     </svg>
                 )}
-                {isLoading ? 'Redirigiendo...' : 'Participar con Google'}
+                {isLoading ? 'Redirigiendo...' : 'Entrar con Google'}
             </button>
         </div>
     );

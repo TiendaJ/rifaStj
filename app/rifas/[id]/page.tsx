@@ -98,7 +98,10 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
 
                         <div className="pt-2">
                             {!session ? (
-                                <RifaLoginPrompt rifaId={rifa.id} />
+                                <>
+                                    <RifaLoginPrompt rifaId={rifa.id} />
+                                    <p className="text-xs text-gray-400 mt-4 font-mono">Debug: No active session found on server.</p>
+                                </>
                             ) : !isClient ? (
                                 <div className="bg-yellow-50 p-4 rounded-lg text-yellow-800 border border-yellow-200 text-center text-sm font-medium">
                                     Modo Administrador: Inscripción deshabilitada.
