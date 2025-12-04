@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Filter, Eye, X, Check, XCircle, FileDown, Ticket } from "lucide-react";
+import { Search, Filter, Eye, X, Check, XCircle, FileDown, Ticket, Trophy, Crown } from "lucide-react";
 import { updateEstadoInscripcion } from "@/app/actions/inscripcion";
+import { marcarGanador } from "@/app/actions/rifa-winner";
 import Image from "next/image";
 import { jsPDF } from "jspdf";
 
@@ -198,6 +199,7 @@ export default function InscripcionesTable({ inscripciones, rifas }: Inscripcion
                             <tr>
                                 <th className="p-4 font-medium text-xs uppercase tracking-wider">Participante</th>
                                 <th className="p-4 font-medium text-xs uppercase tracking-wider">Rifa</th>
+                                <th className="p-4 font-medium text-xs uppercase tracking-wider">Ticket</th>
                                 <th className="p-4 font-medium text-xs uppercase tracking-wider">Comprobante</th>
                                 <th className="p-4 font-medium text-xs uppercase tracking-wider">Estado</th>
                                 <th className="p-4 font-medium text-xs uppercase tracking-wider">Acciones</th>
@@ -212,6 +214,11 @@ export default function InscripcionesTable({ inscripciones, rifas }: Inscripcion
                                         <div className="text-xs text-gray-400">{ins.participante.telefono}</div>
                                     </td>
                                     <td className="p-4 text-gray-600 text-sm">{ins.rifa.nombre}</td>
+                                    <td className="p-4">
+                                        <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 border border-gray-200">
+                                            {ins.id.slice(0, 8).toUpperCase()}
+                                        </span>
+                                    </td>
                                     <td className="p-4">
                                         {ins.comprobante_imagen ? (
                                             <button
@@ -235,7 +242,7 @@ export default function InscripcionesTable({ inscripciones, rifas }: Inscripcion
                                         </span>
                                     </td>
                                     <td className="p-4">
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 items-center">
                                             {ins.estado === 'pendiente' && (
                                                 <>
                                                     <form action={updateEstadoInscripcion.bind(null, ins.id)}>
@@ -252,13 +259,37 @@ export default function InscripcionesTable({ inscripciones, rifas }: Inscripcion
                                                     </form>
                                                 </>
                                             )}
+                                            {ins.estado === 'confirmado' && (
+                                                <>
+                                                    {ins.rifa.ganador_id === ins.id ? (
+                                                        <span className="flex items-center gap-1 text-yellow-600 font-bold text-xs bg-yellow-50 px-2 py-1 rounded border border-yellow-200">
+                                                            <Crown className="w-3 h-3 fill-current" />
+                                                            GANADOR
+                                                        </span>
+                                                    ) : (
+                                                        (!ins.rifa.ganador_id || ins.rifa.estado !== 'finalizada') && (
+                                                            <button
+                                                                onClick={async () => {
+                                                                    if (confirm('¿Estás seguro de marcar este ticket como GANADOR? Esto finalizará la rifa.')) {
+                                                                        await marcarGanador(ins.id, ins.rifa.id);
+                                                                    }
+                                                                }}
+                                                                className="p-1 text-yellow-600 hover:bg-yellow-50 rounded transition-colors"
+                                                                title="Marcar como Ganador"
+                                                            >
+                                                                <Trophy className="w-4 h-4" />
+                                                            </button>
+                                                        )
+                                                    )}
+                                                </>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
                             ))}
                             {filteredInscripciones.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="p-12 text-center text-gray-500">
+                                    <td colSpan={6} className="p-12 text-center text-gray-500">
                                         No se encontraron inscripciones que coincidan con los filtros.
                                     </td>
                                 </tr>

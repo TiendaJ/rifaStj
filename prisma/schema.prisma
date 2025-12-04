@@ -21,6 +21,7 @@ model Rifa {
   fecha_sorteo     DateTime?
 
   participantes RifaParticipante[]
+  ganador_id    String? // ID de la inscripción ganadora (RifaParticipante)
 }
 
 model Participante {
