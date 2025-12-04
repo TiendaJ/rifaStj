@@ -90,7 +90,7 @@ export default function InscripcionForm({ rifaId }: { rifaId: string }) {
             <button
                 type="submit"
                 disabled={pending}
-                className="w-full py-4 bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-lg"
+                className="w-full py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-[1.02] text-lg active:scale-95"
             >
                 {pending ? 'Enviando...' : 'Confirmar Inscripción'}
             </button>
