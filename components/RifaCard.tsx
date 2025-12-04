@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Share2, Play, X, Copy, Check } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
@@ -25,6 +25,10 @@ export default function RifaCard({ rifa }: RifaCardProps) {
     const [copied, setCopied] = useState(false);
     const router = useRouter();
     const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+
+    useEffect(() => {
+        console.log("RifaCard mounted for", rifa.id);
+    }, [rifa.id]);
 
     const handleShare = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -85,7 +89,7 @@ export default function RifaCard({ rifa }: RifaCardProps) {
             if (isLoggedIn) {
                 window.location.href = `/rifas/${rifa.id}`;
             } else {
-                // Save next URL to localStorage to avoid polluting the redirect URL which can cause Supabase to reject it
+                // Save next URL to localStorage
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('auth_next', `/rifas/${rifa.id}`);
                 }
@@ -168,9 +172,9 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                     <button
                         onClick={handleParticipate}
                         disabled={isLoadingAuth}
-                        className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2.5 rounded-md font-bold text-sm uppercase tracking-wide hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg transform group-hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2.5 rounded-md font-bold text-sm uppercase tracking-wide hover:from-purple-700 hover:to-pink-700 transition-all shadow-md hover:shadow-lg transform group-hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed border-4 border-red-500"
                     >
-                        {isLoadingAuth ? 'Redirigiendo...' : 'Participar Ahora'}
+                        {isLoadingAuth ? 'Redirigiendo...' : 'DEBUG: CLICK ME'}
                     </button>
                 </div>
             </div>
