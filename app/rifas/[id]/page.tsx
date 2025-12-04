@@ -52,7 +52,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                 </Link>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                    <div className="space-y-6 md:space-y-8">
+                    <div className="space-y-6 md:space-y-8 order-2 md:order-1">
                         <RifaDetailImage imagen={rifa.imagen} nombre={rifa.nombre} id={rifa.id} />
 
                         <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -71,7 +71,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                         </div>
                     </div>
 
-                    <div className="space-y-6 md:space-y-8">
+                    <div className="space-y-6 md:space-y-8 order-1 md:order-2">
                         <div>
                             <div className="flex items-center gap-3 mb-4">
                                 <span className={`px-2 py-1 rounded-md text-xs font-bold border uppercase tracking-wide ${rifa.estado === 'activa' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'
