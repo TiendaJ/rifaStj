@@ -10,7 +10,7 @@ export default function InscripcionForm({ rifaId, isProfileComplete, precio }: {
     const [state, action, pending] = useActionState(inscribirse, undefined);
     const [copied, setCopied] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [cantidad, setCantidad] = useState(1);
+    const [cantidad, setCantidad] = useState<number | string>(1);
     const router = useRouter();
 
     const handleCopy = () => {
@@ -81,7 +81,7 @@ export default function InscripcionForm({ rifaId, isProfileComplete, precio }: {
                         <p className="font-semibold text-gray-700">Pasos:</p>
                         <ol className="list-decimal list-inside space-y-0.5 ml-1">
                             <li>Escanea QR o usa número.</li>
-                            <li>Paga monto exacto: <span className="font-bold text-black">S/ {(precio * cantidad).toFixed(2)}</span></li>
+                            <li>Paga monto exacto: <span className="font-bold text-black">S/ {(precio * (Number(cantidad) || 1)).toFixed(2)}</span></li>
                             <li>Sube captura.</li>
                         </ol>
                     </div>
@@ -98,13 +98,29 @@ export default function InscripcionForm({ rifaId, isProfileComplete, precio }: {
                         type="number"
                         min="1"
                         value={cantidad}
-                        onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '') {
+                                // @ts-ignore
+                                setCantidad('');
+                            } else {
+                                const num = parseInt(val);
+                                if (!isNaN(num) && num >= 1) {
+                                    setCantidad(num);
+                                }
+                            }
+                        }}
+                        onBlur={() => {
+                            if (cantidad === '' || Number(cantidad) < 1) {
+                                setCantidad(1);
+                            }
+                        }}
                         required
                         className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none text-gray-900"
                     />
                     <div className="flex justify-between items-center mt-2 text-sm">
                         <span className="text-gray-500">Precio unitario: S/ {precio.toFixed(2)}</span>
-                        <span className="font-bold text-gray-900">Total a pagar: S/ {(precio * cantidad).toFixed(2)}</span>
+                        <span className="font-bold text-gray-900">Total a pagar: S/ {(precio * (Number(cantidad) || 1)).toFixed(2)}</span>
                     </div>
                 </div>
 
@@ -133,7 +149,7 @@ export default function InscripcionForm({ rifaId, isProfileComplete, precio }: {
                     disabled={pending}
                     className="w-full py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-[1.02] text-lg active:scale-95"
                 >
-                    {pending ? 'Enviando...' : `Confirmar Inscripción (S/ ${(precio * cantidad).toFixed(2)})`}
+                    {pending ? 'Enviando...' : `Confirmar Inscripción (S/ ${(precio * (Number(cantidad) || 1)).toFixed(2)})`}
                 </button>
             </form>
         </>
