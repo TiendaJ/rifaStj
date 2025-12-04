@@ -22,7 +22,7 @@ export default async function HomePage() {
       {/* Hero section - Centered, high contrast, minimal */}
       <section className="max-w-4xl mx-auto text-center pt-4 md:pt-6">
         <h1 className="text-3xl md:text-5xl font-extrabold mb-2 md:mb-4 tracking-tighter text-black">
-          Jshop
+          Rifas
         </h1>
         <p className="text-base md:text-lg text-gray-500 mb-4 md:mb-6 max-w-2xl mx-auto leading-relaxed">
           Las rifas tienen cupos limitados según el valor del premio. Participas realizando el pago. Recibirás por WhatsApp el enlace de la transmisión.

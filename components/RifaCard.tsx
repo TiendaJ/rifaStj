@@ -115,10 +115,10 @@ export default function RifaCard({ rifa }: RifaCardProps) {
 
     return (
         <>
-            <div className="card-tech group block h-full relative">
+            <div className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200 group block h-full relative overflow-hidden">
                 <Link href={`/rifas/${rifa.id}`} className="block">
                     {rifa.imagen ? (
-                        <div className="aspect-video w-full overflow-hidden rounded-md mb-4 bg-gray-100 border border-gray-100 relative">
+                        <div className="aspect-video w-full bg-gray-100 relative">
                             <img
                                 src={rifa.imagen}
                                 alt={rifa.nombre}
@@ -129,14 +129,14 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                             </div>
                         </div>
                     ) : (
-                        <div className="aspect-video w-full bg-gray-100 rounded-md mb-4 flex items-center justify-center text-gray-400 border border-gray-200 relative">
+                        <div className="aspect-video w-full bg-gray-100 flex items-center justify-center text-gray-400 relative">
                             <span className="font-mono text-xs">NO_IMAGE</span>
                         </div>
                     )}
                 </Link>
 
-                {/* Action Buttons Overlay - Moved outside Link to avoid nesting */}
-                <div className="absolute top-[calc(56.25%-40px)] right-2 flex gap-2 z-10">
+                {/* Action Buttons Overlay */}
+                <div className="absolute top-2 left-2 flex gap-2 z-10">
                     <button
                         onClick={handleOpenVideo}
                         className="bg-white/90 hover:bg-white text-black p-2 rounded-full shadow-lg transition-transform hover:scale-110 flex items-center justify-center"
@@ -153,14 +153,14 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                     </button>
                 </div>
 
-                <div>
+                <div className="p-5">
                     <Link href={`/rifas/${rifa.id}`}>
                         <h3 className="text-lg font-bold text-black group-hover:text-gray-700 transition-colors mb-2">
                             {rifa.nombre}
                         </h3>
                     </Link>
 
-                    <div className="flex justify-between items-center text-md font-mono text-gray-400 pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center text-md font-mono text-gray-400 pt-4 border-t border-gray-100 mt-4">
                         <span>ID: {rifa.id.slice(0, 8)}...</span>
                         <span>CUPOS: {rifa._count.participantes}/{rifa.capacidad_maxima}</span>
                     </div>
