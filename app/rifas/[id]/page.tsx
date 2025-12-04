@@ -83,6 +83,11 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
                             <div className="text-2xl md:text-3xl font-bold text-black mb-2">
                                 S/{rifa.monto} <span className="text-lg font-normal text-gray-500">/ ticket</span>
                             </div>
+                            {rifa.precio_producto && (
+                                <div className="text-sm text-gray-500 font-mono mb-4">
+                                    Valor referencial del producto: S/ {rifa.precio_producto}
+                                </div>
+                            )}
                             {rifa.fecha_sorteo && (
                                 <div className="text-sm font-medium text-gray-500 flex items-center gap-2">
                                     <span className="uppercase tracking-wider text-xs">Juega el:</span>

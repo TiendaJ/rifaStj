@@ -9,6 +9,7 @@ type Rifa = {
     nombre?: string;
     descripcion?: string;
     monto?: number;
+    precio_producto?: number | null;
     capacidad_maxima?: number;
     estado?: string;
     imagen?: string | null;
@@ -47,7 +48,7 @@ export default function RifaForm({ rifa }: { rifa?: Rifa }) {
 
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Precio ($)</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Precio Ticket ($)</label>
                         <input
                             name="monto"
                             type="number"
@@ -57,6 +58,18 @@ export default function RifaForm({ rifa }: { rifa?: Rifa }) {
                             className="input-tech"
                         />
                         {state?.error && 'monto' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.monto?.[0]}</p>}
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Precio Producto (Ref.)</label>
+                        <input
+                            name="precio_producto"
+                            type="number"
+                            step="0.01"
+                            defaultValue={rifa?.precio_producto ?? ''}
+                            className="input-tech"
+                        />
+                        {state?.error && 'precio_producto' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.precio_producto?.[0]}</p>}
                     </div>
 
                     <div>

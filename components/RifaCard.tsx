@@ -12,6 +12,7 @@ interface RifaCardProps {
         id: string;
         nombre: string;
         monto: number;
+        precio_producto?: number | null;
         imagen: string | null;
         capacidad_maxima: number;
         _count: {
@@ -164,6 +165,11 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                         <span>ID: {rifa.id.slice(0, 8)}...</span>
                         <span>CUPOS: {rifa._count.participantes}/{rifa.capacidad_maxima}</span>
                     </div>
+                    {rifa.precio_producto && (
+                        <div className="mt-2 text-xs text-gray-500 font-mono text-right">
+                            Valor ref: S/ {rifa.precio_producto}
+                        </div>
+                    )}
                     <button
                         onClick={handleParticipate}
                         disabled={isLoadingAuth}

@@ -13,6 +13,7 @@ model Rifa {
   nombre           String
   descripcion      String
   monto            Float
+  precio_producto  Float?   // Precio total del producto (referencial)
   imagen           String?
   estado           String   @default("activa") // activa, pausada, finalizada, desactivada
   capacidad_maxima Int

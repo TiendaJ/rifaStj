@@ -45,7 +45,14 @@ export default async function RifasListPage() {
                                 <td className="p-4 text-gray-600 text-sm">
                                     {rifa.fecha_sorteo ? new Date(rifa.fecha_sorteo).toLocaleDateString() : '-'}
                                 </td>
-                                <td className="p-4 text-gray-600 font-mono">${rifa.monto}</td>
+                                <td className="p-4 text-gray-600 font-mono">
+                                    <div className="flex flex-col">
+                                        <span>Ticket: ${rifa.monto}</span>
+                                        {rifa.precio_producto && (
+                                            <span className="text-xs text-gray-400">Prod: ${rifa.precio_producto}</span>
+                                        )}
+                                    </div>
+                                </td>
                                 <td className="p-4">
                                     <div className="w-full bg-gray-100 rounded-full h-2.5 mb-1 border border-gray-200">
                                         <div

@@ -11,6 +11,7 @@ const rifaSchema = z.object({
     nombre: z.string().min(3, "Nombre muy corto"),
     descripcion: z.string().min(10, "Descripción muy corta"),
     monto: z.coerce.number().min(0, "Monto inválido"),
+    precio_producto: z.coerce.number().min(0, "Precio inválido").optional(),
     capacidad_maxima: z.coerce.number().min(1, "Capacidad inválida"),
     estado: z.enum(['activa', 'pausada', 'finalizada', 'desactivada']),
     fecha_sorteo: z.string().optional().transform((str) => str ? new Date(str) : null),
