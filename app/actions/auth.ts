@@ -7,7 +7,7 @@ import { encrypt, getSession } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-// ... (keep existing code)
+
 
 export async function googleLogin(userData: { email: string; id: string; nombre: string }) {
     const { email, id: supabase_id, nombre } = userData;
