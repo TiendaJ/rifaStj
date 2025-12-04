@@ -38,7 +38,7 @@ export default async function RifaDetailPage({ params }: { params: Promise<{ id:
         });
 
         if (user) {
-            isProfileComplete = !!(user.email && user.direccion && user.distrito && user.provincia && user.departamento);
+            isProfileComplete = !!(user.email && user.direccion && user.distrito && user.provincia && user.departamento && user.dni && user.telefono);
         }
 
         const existing = await prisma.rifaParticipante.findUnique({

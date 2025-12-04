@@ -34,6 +34,31 @@ export default function CompleteProfileModal({
                 </div>
 
                 <form action={action} className="p-6 space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">DNI</label>
+                            <input
+                                name="dni"
+                                maxLength={8}
+                                required
+                                className="input-tech w-full"
+                                placeholder="12345678"
+                            />
+                            {state?.error && 'dni' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.dni?.[0]}</p>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                            <input
+                                name="telefono"
+                                type="tel"
+                                required
+                                className="input-tech w-full"
+                                placeholder="999999999"
+                            />
+                            {state?.error && 'telefono' in state.error && <p className="text-red-500 text-xs mt-1">{state.error.telefono?.[0]}</p>}
+                        </div>
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                         <input
