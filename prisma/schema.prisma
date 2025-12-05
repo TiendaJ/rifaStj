@@ -57,3 +57,25 @@ model RifaParticipante {
   rifa         Rifa         @relation(fields: [rifa_id], references: [id])
   participante Participante @relation(fields: [participante_id], references: [id])
 }
+
+model Categoria {
+  id          String     @id @default(uuid())
+  descripcion String
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  productos   Producto[]
+}
+
+model Producto {
+  id           String    @id @default(uuid())
+  categoria_id String
+  nombre       String
+  descripcion  String
+  precio       Float
+  cantidad     Int
+  fotos        String[]
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  categoria    Categoria @relation(fields: [categoria_id], references: [id])
+}

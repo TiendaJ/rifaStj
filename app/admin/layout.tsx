@@ -24,6 +24,15 @@ export default function AdminLayout({
                     <Link href="/admin/inscripciones" className="block px-4 py-2.5 rounded-md hover:bg-gray-50 text-gray-600 hover:text-black font-medium transition-colors">
                         Inscripciones
                     </Link>
+                    <div className="pt-4 pb-1">
+                        <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tienda</p>
+                    </div>
+                    <Link href="/admin/categorias" className="block px-4 py-2.5 rounded-md hover:bg-gray-50 text-gray-600 hover:text-black font-medium transition-colors">
+                        Categorías
+                    </Link>
+                    <Link href="/admin/productos" className="block px-4 py-2.5 rounded-md hover:bg-gray-50 text-gray-600 hover:text-black font-medium transition-colors">
+                        Productos
+                    </Link>
                 </nav>
 
                 <div className="p-4 border-t border-gray-100">
