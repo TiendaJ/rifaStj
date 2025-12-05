@@ -2,12 +2,17 @@
 
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
+'use client';
+
+import jsPDF from 'jspdf';
+import QRCode from 'qrcode';
 import { FileDown } from 'lucide-react';
 
 interface Rifa {
     id: string;
     nombre: string;
     precio_producto: number | null;
+    monto: number;
     capacidad_maxima: number;
     imagen: string | null;
     _count: {
@@ -20,17 +25,24 @@ export default function RifaReportButton({ rifas }: { rifas: Rifa[] }) {
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 10;
+        const margin = 15;
         const colGap = 10;
         const colWidth = (pageWidth - (margin * 2) - colGap) / 2;
 
+        // Title
+        doc.setFontSize(22);
+        doc.setFont('helvetica', 'bold');
+        doc.text("Catálogo de Rifas - Jshop", pageWidth / 2, 20, { align: 'center' });
+
         let x = margin;
-        let y = margin;
-        let colIndex = 0; // 0 or 1
+        let y = 35; // Start below title
+        let colIndex = 0;
 
         for (const rifa of rifas) {
+            const cardHeight = 110; // Increased height for larger images
+
             // Check if we need a new page
-            if (y + 100 > pageHeight) { // Assuming each card takes ~100mm
+            if (y + cardHeight > pageHeight) {
                 doc.addPage();
                 y = margin;
                 x = margin;
@@ -40,58 +52,61 @@ export default function RifaReportButton({ rifas }: { rifas: Rifa[] }) {
             // Calculate X based on column
             x = margin + (colIndex * (colWidth + colGap));
 
-            // Card Border (Optional, for visual guide)
-            doc.setDrawColor(200, 200, 200);
-            doc.rect(x, y, colWidth, 90); // Height 90mm
-
             // Image
             if (rifa.imagen) {
                 try {
                     const img = await fetchImage(rifa.imagen);
                     if (img) {
-                        // Maintain aspect ratio, fit within width
                         const imgProps = doc.getImageProperties(img);
                         const imgRatio = imgProps.width / imgProps.height;
-                        let imgW = colWidth - 10;
+                        let imgW = colWidth; // Full width
                         let imgH = imgW / imgRatio;
 
-                        if (imgH > 40) { // Max height 40mm
-                            imgH = 40;
+                        // Max height constraint (increased to 60mm)
+                        if (imgH > 60) {
+                            imgH = 60;
                             imgW = imgH * imgRatio;
                         }
 
                         // Center image
                         const imgX = x + (colWidth - imgW) / 2;
-                        doc.addImage(img, 'JPEG', imgX, y + 5, imgW, imgH);
+                        doc.addImage(img, 'JPEG', imgX, y, imgW, imgH);
                     }
                 } catch (e) {
                     console.error("Error loading image", e);
                 }
             }
 
-            // Text content starts below image area (approx 50mm from top of card)
-            const textY = y + 50;
+            // Text content starts below image area
+            const textY = y + 65;
+
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            const titleLines = doc.splitTextToSize(rifa.nombre.toUpperCase(), colWidth);
+            doc.text(titleLines, x, textY);
+
+            let nextY = textY + (titleLines.length * 6) + 4;
 
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
-            // Split title if too long
-            const titleLines = doc.splitTextToSize(rifa.nombre.toUpperCase(), colWidth - 10);
-            doc.text(titleLines, x + 5, textY);
+            doc.setTextColor(220, 38, 38); // Red color for price
+            doc.text(`PRECIO RIFA: S/ ${rifa.monto.toFixed(2)}`, x, nextY);
+            doc.setTextColor(0, 0, 0); // Reset color
 
-            const nextY = textY + (titleLines.length * 5) + 2;
-
+            nextY += 6;
             doc.setFontSize(10);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Valor ref: S/ ${rifa.precio_producto?.toFixed(2) || '0.00'}`, x + 5, nextY);
+            doc.text(`Valor ref: S/ ${rifa.precio_producto?.toFixed(2) || '0.00'}`, x, nextY);
 
-            doc.text(`CUPOS: ${rifa._count.participantes}/${rifa.capacidad_maxima}`, x + 5, nextY + 5);
+            nextY += 5;
+            doc.text(`CUPOS: ${rifa._count.participantes}/${rifa.capacidad_maxima}`, x, nextY);
 
             // QR Code
             try {
-                const qrData = `https://jshop.pe/rifas/${rifa.id}`; // URL to the raffle
+                const qrData = `https://jshop.pe/rifas/${rifa.id}`;
                 const qrDataUrl = await QRCode.toDataURL(qrData);
-                // Place QR code at bottom right of card
-                doc.addImage(qrDataUrl, 'PNG', x + colWidth - 25, y + 60, 20, 20);
+                // Place QR code at bottom right relative to text
+                doc.addImage(qrDataUrl, 'PNG', x + colWidth - 25, textY, 25, 25);
             } catch (e) {
                 console.error("Error generating QR", e);
             }
@@ -100,11 +115,11 @@ export default function RifaReportButton({ rifas }: { rifas: Rifa[] }) {
             colIndex++;
             if (colIndex > 1) {
                 colIndex = 0;
-                y += 100; // Move down for next row
+                y += cardHeight + 10; // Move down for next row with gap
             }
         }
 
-        doc.save('reporte-rifas.pdf');
+        doc.save('catalogo-rifas.pdf');
     };
 
     const fetchImage = (url: string): Promise<string> => {
@@ -131,7 +146,7 @@ export default function RifaReportButton({ rifas }: { rifas: Rifa[] }) {
             className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
         >
             <FileDown size={20} />
-            Descargar Reporte PDF
+            Descargar PDF
         </button>
     );
 }
