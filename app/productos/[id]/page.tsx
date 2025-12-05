@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { getSession } from '@/lib/auth';
 import { ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import ProductActions from './ProductActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,33 +80,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                 </div>
 
                                 <div className="mt-auto pt-8 border-t border-gray-100">
-                                    <div className="flex flex-col gap-4">
-                                        <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
-                                            <span>Disponibilidad:</span>
-                                            <span className={producto.cantidad > 0 ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-                                                {producto.cantidad > 0 ? `${producto.cantidad} unidades` : 'Agotado'}
-                                            </span>
-                                        </div>
-
-                                        <a
-                                            href={whatsappLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={`w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-white font-bold text-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] ${producto.cantidad > 0
-                                                    ? 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-600/20'
-                                                    : 'bg-gray-400 cursor-not-allowed'
-                                                }`}
-                                            onClick={(e) => {
-                                                if (producto.cantidad <= 0) e.preventDefault();
-                                            }}
-                                        >
-                                            <MessageCircle size={24} />
-                                            {producto.cantidad > 0 ? 'Comprar por WhatsApp' : 'No disponible'}
-                                        </a>
-                                        <p className="text-center text-xs text-gray-400 mt-2">
-                                            Serás redirigido a WhatsApp para coordinar la compra.
-                                        </p>
-                                    </div>
+                                    <ProductActions whatsappLink={whatsappLink} cantidad={producto.cantidad} />
                                 </div>
                             </div>
                         </div>
