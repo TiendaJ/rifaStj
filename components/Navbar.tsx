@@ -25,6 +25,9 @@ export function Navbar({ session }: NavbarProps) {
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <Link href="/" className="text-gray-600 hover:text-black transition-colors">
+                        Rifas
+                    </Link>
                     <Link href="/productos" className="text-gray-600 hover:text-black transition-colors">
                         Productos
                     </Link>
@@ -69,6 +72,13 @@ export function Navbar({ session }: NavbarProps) {
             {isOpen && (
                 <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 shadow-lg">
                     <nav className="flex flex-col gap-4 text-sm font-medium">
+                        <Link
+                            href="/"
+                            className="text-gray-600 hover:text-black transition-colors py-2"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            Rifas
+                        </Link>
                         <Link
                             href="/productos"
                             className="text-gray-600 hover:text-black transition-colors py-2"
