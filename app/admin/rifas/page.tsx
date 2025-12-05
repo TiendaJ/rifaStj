@@ -2,6 +2,8 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { deleteRifa } from '@/app/actions/rifa';
 
+import RifaReportButton from './RifaReportButton';
+
 export default async function RifasListPage() {
     const rifas = await prisma.rifa.findMany({
         where: { NOT: { estado: 'desactivada' } },
@@ -13,9 +15,12 @@ export default async function RifasListPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Gestión de Rifas</h2>
-                <Link href="/admin/rifas/new" className="btn-primary">
-                    Nueva Rifa
-                </Link>
+                <div className="flex gap-3">
+                    <RifaReportButton rifas={rifas} />
+                    <Link href="/admin/rifas/new" className="btn-primary">
+                        Nueva Rifa
+                    </Link>
+                </div>
             </div>
 
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
