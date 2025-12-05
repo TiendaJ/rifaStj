@@ -11,10 +11,12 @@ interface RifaCardProps {
     rifa: {
         id: string;
         nombre: string;
+        descripcion: string;
         monto: number;
         precio_producto?: number | null;
         imagen: string | null;
         capacidad_maxima: number;
+        fecha_sorteo: Date | null;
         _count: {
             participantes: number;
         };
@@ -160,6 +162,16 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                             {rifa.nombre}
                         </h3>
                     </Link>
+
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                        {rifa.descripcion}
+                    </p>
+
+                    {rifa.fecha_sorteo && (
+                        <div className="text-xs text-gray-500 mb-3 font-medium">
+                            Juega el: {new Date(rifa.fecha_sorteo).toLocaleDateString()} {new Date(rifa.fecha_sorteo).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    )}
 
                     <div className="flex justify-between items-center text-md font-mono text-gray-400 pt-4 border-t border-gray-100 mt-4">
                         <span>{rifa.precio_producto ? `Valor ref: S/ ${rifa.precio_producto}` : ''}</span>
