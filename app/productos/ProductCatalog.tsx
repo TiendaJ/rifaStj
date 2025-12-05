@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Filter, ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
 
 interface Categoria {
     id: string;
@@ -81,7 +82,11 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                 {/* Product Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
                     {filteredProducts.map(product => (
-                        <div key={product.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col h-full">
+                        <Link
+                            href={`/productos/${product.id}`}
+                            key={product.id}
+                            className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col h-full cursor-pointer"
+                        >
                             <div className="relative aspect-square overflow-hidden bg-gray-100">
                                 {product.fotos && product.fotos.length > 0 ? (
                                     <img
@@ -126,7 +131,7 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 

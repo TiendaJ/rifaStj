@@ -45,6 +45,19 @@ export async function getProductos() {
     }
 }
 
+export async function getProductoById(id: string) {
+    try {
+        const producto = await prisma.producto.findUnique({
+            where: { id },
+            include: { categoria: true },
+        });
+        return producto;
+    } catch (error) {
+        console.error('Error fetching producto:', error);
+        return null;
+    }
+}
+
 export async function createProducto(formData: FormData) {
     const nombre = formData.get('nombre') as string;
     const descripcion = formData.get('descripcion') as string;
