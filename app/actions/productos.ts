@@ -80,13 +80,12 @@ export async function createProducto(formData: FormData) {
                 fotos: uploadedUrls,
             },
         });
+        revalidatePath('/admin/productos');
+        return { success: true };
     } catch (error) {
         console.error('Error creating producto:', error);
         return { error: 'Error al crear el producto' };
     }
-
-    revalidatePath('/admin/productos');
-    redirect('/admin/productos');
 }
 
 export async function updateProducto(id: string, formData: FormData) {
@@ -128,13 +127,12 @@ export async function updateProducto(id: string, formData: FormData) {
                 fotos: finalFotos,
             },
         });
+        revalidatePath('/admin/productos');
+        return { success: true };
     } catch (error) {
         console.error('Error updating producto:', error);
         return { error: 'Error al actualizar el producto' };
     }
-
-    revalidatePath('/admin/productos');
-    redirect('/admin/productos');
 }
 
 export async function deleteProducto(id: string) {

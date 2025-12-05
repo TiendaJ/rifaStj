@@ -17,13 +17,19 @@ export default function CategoriaManager({ categorias }: { categorias: Categoria
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
         try {
+            let result;
             if (editingCategoria) {
-                await updateCategoria(editingCategoria.id, formData);
+                result = await updateCategoria(editingCategoria.id, formData);
             } else {
-                await createCategoria(formData);
+                result = await createCategoria(formData);
             }
-            setIsModalOpen(false);
-            setEditingCategoria(null);
+
+            if (result && 'error' in result) {
+                alert(result.error);
+            } else {
+                setIsModalOpen(false);
+                setEditingCategoria(null);
+            }
         } catch (error) {
             console.error(error);
             alert('Error al guardar la categoría');

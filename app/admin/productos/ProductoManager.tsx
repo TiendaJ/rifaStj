@@ -28,18 +28,24 @@ export default function ProductoManager({ productos, categorias }: { productos: 
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
         try {
+            let result;
             if (editingProducto) {
                 // Append existing photos if needed, handled in server action via hidden inputs or logic
                 // Actually, server action expects 'existing_fotos'
                 editingProducto.fotos.forEach(foto => {
                     formData.append('existing_fotos', foto);
                 });
-                await updateProducto(editingProducto.id, formData);
+                result = await updateProducto(editingProducto.id, formData);
             } else {
-                await createProducto(formData);
+                result = await createProducto(formData);
             }
-            setIsModalOpen(false);
-            setEditingProducto(null);
+
+            if (result && 'error' in result) {
+                alert(result.error);
+            } else {
+                setIsModalOpen(false);
+                setEditingProducto(null);
+            }
         } catch (error) {
             console.error(error);
             alert('Error al guardar el producto');

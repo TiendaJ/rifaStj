@@ -29,13 +29,12 @@ export async function createCategoria(formData: FormData) {
                 descripcion,
             },
         });
+        revalidatePath('/admin/categorias');
+        return { success: true };
     } catch (error) {
         console.error('Error creating categoria:', error);
         return { error: 'Error al crear la categoría' };
     }
-
-    revalidatePath('/admin/categorias');
-    redirect('/admin/categorias');
 }
 
 export async function updateCategoria(id: string, formData: FormData) {
@@ -52,13 +51,12 @@ export async function updateCategoria(id: string, formData: FormData) {
                 descripcion,
             },
         });
+        revalidatePath('/admin/categorias');
+        return { success: true };
     } catch (error) {
         console.error('Error updating categoria:', error);
         return { error: 'Error al actualizar la categoría' };
     }
-
-    revalidatePath('/admin/categorias');
-    redirect('/admin/categorias');
 }
 
 export async function deleteCategoria(id: string) {
