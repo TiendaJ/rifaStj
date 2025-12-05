@@ -13,7 +13,7 @@ export default function ProductActions({ whatsappLink, cantidad }: ProductAction
             <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
                 <span>Disponibilidad:</span>
                 <span className={cantidad > 0 ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-                    {cantidad > 0 ? `${cantidad} unidades` : 'Agotado'}
+                    {cantidad > 0 ? 'Disponible' : 'Agotado'}
                 </span>
             </div>
 
