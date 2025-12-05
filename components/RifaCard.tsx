@@ -162,14 +162,9 @@ export default function RifaCard({ rifa }: RifaCardProps) {
                     </Link>
 
                     <div className="flex justify-between items-center text-md font-mono text-gray-400 pt-4 border-t border-gray-100 mt-4">
-                        <span>ID: {rifa.id.slice(0, 8)}...</span>
+                        <span>{rifa.precio_producto ? `Valor ref: S/ ${rifa.precio_producto}` : ''}</span>
                         <span>CUPOS: {rifa._count.participantes}/{rifa.capacidad_maxima}</span>
                     </div>
-                    {rifa.precio_producto && (
-                        <div className="mt-2 text-xs text-gray-500 font-mono text-right">
-                            Valor ref: S/ {rifa.precio_producto}
-                        </div>
-                    )}
                     <button
                         onClick={handleParticipate}
                         disabled={isLoadingAuth}
