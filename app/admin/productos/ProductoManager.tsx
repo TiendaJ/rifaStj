@@ -234,8 +234,19 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                                     {editingProducto && editingProducto.fotos && editingProducto.fotos.length > 0 && (
                                         <div className="mt-2 flex gap-2 overflow-x-auto pb-2">
                                             {editingProducto.fotos.map((foto, idx) => (
-                                                <div key={idx} className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
+                                                <div key={idx} className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 group">
                                                     <img src={foto} alt={`Foto ${idx}`} className="w-full h-full object-cover" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const newFotos = editingProducto.fotos.filter((_, i) => i !== idx);
+                                                            setEditingProducto({ ...editingProducto, fotos: newFotos });
+                                                        }}
+                                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600"
+                                                        title="Eliminar foto"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
                                                 </div>
                                             ))}
                                         </div>
