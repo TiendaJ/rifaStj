@@ -3,7 +3,7 @@ import { getCategorias } from '@/app/actions/categorias';
 import ProductCatalog from './ProductCatalog';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { getSession } from '@/app/actions/auth';
+import { getSession } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
