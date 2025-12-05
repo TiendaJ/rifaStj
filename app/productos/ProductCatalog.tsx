@@ -106,28 +106,28 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                                 )}
                             </div>
 
-                            <div className="p-5 flex flex-col flex-grow">
-                                <div className="mb-2">
-                                    <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 px-2 py-1 rounded-md">
+                            <div className="p-3 flex flex-col flex-grow">
+                                <div className="mb-1">
+                                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 px-1.5 py-0.5 rounded-md">
                                         {product.categoria?.descripcion || 'General'}
                                     </span>
                                 </div>
-                                <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                                <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors">
                                     {product.nombre}
                                 </h3>
-                                <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">
+                                <p className="text-gray-500 text-xs mb-2 line-clamp-2 flex-grow">
                                     {product.descripcion}
                                 </p>
-                                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-                                    <span className="text-xl font-bold text-gray-900">
+                                <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-50">
+                                    <span className="text-base font-bold text-gray-900">
                                         S/ {product.precio.toFixed(2)}
                                     </span>
                                     <button
                                         disabled={product.cantidad <= 0}
-                                        className="bg-black text-white p-2 rounded-full hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed group-active:scale-95"
+                                        className="bg-black text-white p-1.5 rounded-full hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed group-active:scale-95"
                                         title="Ver detalles"
                                     >
-                                        <ShoppingBag size={18} />
+                                        <ShoppingBag size={14} />
                                     </button>
                                 </div>
                             </div>
