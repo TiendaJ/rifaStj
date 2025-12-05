@@ -1,26 +1,16 @@
 import { getProductos } from '@/app/actions/productos';
 import { getCategorias } from '@/app/actions/categorias';
 import ProductCatalog from './ProductCatalog';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { getSession } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProductosPage() {
-    const [productos, categorias, session] = await Promise.all([
+    const [productos, categorias] = await Promise.all([
         getProductos(),
-        getCategorias(),
-        getSession()
+        getCategorias()
     ]);
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar session={session} />
-            <main className="flex-grow">
-                <ProductCatalog productos={productos} categorias={categorias} />
-            </main>
-            <Footer />
-        </div>
+        <ProductCatalog productos={productos} categorias={categorias} />
     );
 }
