@@ -32,16 +32,41 @@ async function uploadImage(file: File): Promise<string | null> {
     return publicUrl;
 }
 
-export async function getProductos() {
+export async function getProductos(query?: string, categoriaId?: string, page: number = 1, limit: number = 10) {
     try {
-        const productos = await prisma.producto.findMany({
-            include: { categoria: true },
-            orderBy: { created_at: 'desc' },
-        });
-        return productos;
+        const where: any = {};
+        if (query) {
+            where.nombre = { contains: query, mode: 'insensitive' }; // Prisma specific for case insensitive
+        }
+        if (categoriaId && categoriaId !== 'all') {
+            where.categoria_id = categoriaId;
+        }
+
+        const skip = (page - 1) * limit;
+
+        const [productos, totalCount] = await Promise.all([
+            prisma.producto.findMany({
+                where,
+                include: { categoria: true },
+                orderBy: { created_at: 'desc' },
+                skip,
+                take: limit,
+            }),
+            prisma.producto.count({ where })
+        ]);
+
+        return {
+            productos,
+            pagination: {
+                total: totalCount,
+                page,
+                limit,
+                totalPages: Math.ceil(totalCount / limit)
+            }
+        };
     } catch (error) {
         console.error('Error fetching productos:', error);
-        return [];
+        return { productos: [], pagination: { total: 0, page: 1, limit: 10, totalPages: 0 } };
     }
 }
 
@@ -55,6 +80,83 @@ export async function getProductoById(id: string) {
     } catch (error) {
         console.error('Error fetching producto:', error);
         return null;
+    }
+}
+
+// ... existing functions ...
+
+// New function for Excel Import
+import * as XLSX from 'xlsx';
+
+export async function importProductosExcel(formData: FormData) {
+    const file = formData.get('file') as File;
+    if (!file) return { error: 'No se subió ningún archivo' };
+
+    try {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const data: any[] = XLSX.utils.sheet_to_json(sheet);
+
+        let successCount = 0;
+        let errorCount = 0;
+
+        for (const row of data) {
+            // Expected columns: Nombre, Descripcion, Precio, Cantidad, Categoria
+            const { Nombre, Descripcion, Precio, Cantidad, Categoria } = row;
+
+            if (!Nombre || !Precio || !Cantidad) {
+                console.warn('Skipping invalid row:', row);
+                errorCount++;
+                continue;
+            }
+
+            // Find or create category (simple logic: find by name, or use default/first found if missing logic)
+            // For now, let's assume Categoria is the exact name of an existing category.
+            let categoria_id = null;
+            if (Categoria) {
+                const cat = await prisma.categoria.findFirst({
+                    where: { descripcion: { equals: Categoria, mode: 'insensitive' } }
+                });
+                if (cat) categoria_id = cat.id;
+            }
+
+            // If category not found, maybe assign to a default or skip?
+            // Let's create it if it doesn't exist? Or just fail? 
+            // Better to fail row or put in "General" if exists. 
+            // For simplicity, if not found, try to find a "General" category or fail.
+            if (!categoria_id) {
+                // Try to find any category to fallback
+                const anyCat = await prisma.categoria.findFirst();
+                if (anyCat) categoria_id = anyCat.id;
+                else {
+                    errorCount++;
+                    continue; // No category at all in DB
+                }
+            }
+
+            await prisma.producto.create({
+                data: {
+                    nombre: String(Nombre),
+                    descripcion: Descripcion ? String(Descripcion) : '',
+                    precio: Number(Precio),
+                    cantidad: Number(Cantidad),
+                    categoria_id: categoria_id,
+                    fotos: [], // No photos from Excel typical
+                    // @ts-ignore
+                    videos: []
+                }
+            });
+            successCount++;
+        }
+
+        revalidatePath('/admin/productos');
+        return { success: true, message: `Importados: ${successCount}. Fallidos: ${errorCount}` };
+    } catch (error) {
+        console.error('Error processing Excel:', error);
+        return { error: 'Error al procesar el archivo Excel' };
     }
 }
 

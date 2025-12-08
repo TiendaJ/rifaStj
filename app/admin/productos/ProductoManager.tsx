@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createProducto, deleteProducto, updateProducto } from '@/app/actions/productos';
 import { createClient } from '@supabase/supabase-js';
-import { Pencil, Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
+import { Pencil, Trash2, Plus, X, Image as ImageIcon, Search, FileSpreadsheet, Loader2 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 interface Categoria {
     id: string;
@@ -22,7 +24,14 @@ interface Producto {
     categoria?: Categoria;
 }
 
-export default function ProductoManager({ productos, categorias }: { productos: Producto[], categorias: Categoria[] }) {
+interface Pagination {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
+export default function ProductoManager({ productos, categorias, pagination }: { productos: Producto[], categorias: Categoria[], pagination: Pagination }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProducto, setEditingProducto] = useState<Producto | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -78,20 +87,119 @@ export default function ProductoManager({ productos, categorias }: { productos: 
         }
     };
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [isImporting, setIsImporting] = useState(false);
+
+    const handleSearch = (term: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (term) params.set('q', term);
+        else params.delete('q');
+        router.replace(`?${params.toString()}`);
+    };
+
+    const handleCategoryFilter = (catId: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (catId && catId !== 'all') params.set('category', catId);
+        else params.delete('category');
+        router.replace(`?${params.toString()}`);
+    };
+
+    const handlePageChange = (page: number) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('page', page.toString());
+        router.replace(`?${params.toString()}`);
+    };
+
+    const handleExcelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setIsImporting(true);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const { importProductosExcel } = await import('@/app/actions/productos');
+            const result = await importProductosExcel(formData);
+            if (result.error) alert(result.error);
+            else alert(result.message || 'Importación exitosa');
+        } catch (error) {
+            console.error(error);
+            alert('Error al importar');
+        } finally {
+            setIsImporting(false);
+            e.target.value = ''; // Reset input
+        }
+    };
+
+    const handleDownloadTemplate = () => {
+        const headers = [
+            {
+                Nombre: 'Ejemplo Producto',
+                Descripcion: 'Descripción del producto',
+                Precio: 99.99,
+                Cantidad: 100,
+                Categoria: 'Electrónica'
+            }
+        ];
+
+        const ws = XLSX.utils.json_to_sheet(headers);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Plantilla");
+        XLSX.writeFile(wb, "plantilla_productos.xlsx");
+    };
+
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <h1 className="text-2xl font-bold text-gray-900">Productos</h1>
-                <button
-                    onClick={() => {
-                        setEditingProducto(null);
-                        setIsModalOpen(true);
-                    }}
-                    className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
-                >
-                    <Plus size={20} />
-                    Nuevo Producto
-                </button>
+                <div className="flex flex-wrap gap-2 w-full md:w-auto">
+                    <button
+                        onClick={handleDownloadTemplate}
+                        className="btn-secondary flex items-center gap-2 bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                    >
+                        <FileSpreadsheet size={20} /> Descargar Plantilla
+                    </button>
+                    <label className="btn-secondary cursor-pointer flex items-center gap-2">
+                        {isImporting ? <Loader2 className="animate-spin" size={20} /> : <div className="flex items-center gap-2"><FileSpreadsheet size={20} /> Importar Excel</div>}
+                        <input type="file" accept=".xlsx, .xls" className="hidden" onChange={handleExcelUpload} disabled={isImporting} />
+                    </label>
+                    <button
+                        onClick={() => {
+                            setEditingProducto(null);
+                            setIsModalOpen(true);
+                        }}
+                        className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
+                    >
+                        <Plus size={20} />
+                        Nuevo
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl border border-gray-200">
+                <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                        type="text"
+                        placeholder="Buscar producto..."
+                        defaultValue={searchParams.get('q') || ''}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-black"
+                    />
+                </div>
+                <div className="w-full md:w-64">
+                    <select
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-black bg-white"
+                        onChange={(e) => handleCategoryFilter(e.target.value)}
+                        value={searchParams.get('category') || 'all'}
+                    >
+                        <option value="all">Todas las categorías</option>
+                        {categorias.map(cat => (
+                            <option key={cat.id} value={cat.id}>{cat.descripcion}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             {/* Desktop Table View */}
@@ -221,6 +329,29 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                     </div>
                 )}
             </div>
+
+            {/* Pagination */}
+            {pagination.totalPages > 1 && (
+                <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                    <button
+                        onClick={() => handlePageChange(pagination.page - 1)}
+                        disabled={pagination.page <= 1}
+                        className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Anterior
+                    </button>
+                    <span className="text-sm text-gray-600">
+                        Página {pagination.page} de {pagination.totalPages}
+                    </span>
+                    <button
+                        onClick={() => handlePageChange(pagination.page + 1)}
+                        disabled={pagination.page >= pagination.totalPages}
+                        className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Siguiente
+                    </button>
+                </div>
+            )}
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
