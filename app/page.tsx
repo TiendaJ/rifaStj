@@ -39,7 +39,20 @@ export default async function HomePage() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {rifas.map((rifa) => (
-            <RifaCard key={rifa.id} rifa={rifa} />
+            <RifaCard
+              key={rifa.id}
+              rifa={{
+                id: rifa.id,
+                nombre: rifa.nombre,
+                descripcion: rifa.descripcion,
+                monto: rifa.monto,
+                precio_producto: rifa.precio_producto,
+                imagen: rifa.imagen,
+                capacidad_maxima: rifa.capacidad_maxima,
+                fecha_sorteo: rifa.fecha_sorteo ? rifa.fecha_sorteo.toISOString() : null,
+                _count: rifa._count,
+              }}
+            />
           ))}
           {rifas.length === 0 && (
             <div className="col-span-full text-center py-12 md:py-20 border border-dashed border-gray-300 rounded-lg">

@@ -16,7 +16,7 @@ interface RifaCardProps {
         precio_producto?: number | null;
         imagen: string | null;
         capacidad_maxima: number;
-        fecha_sorteo: Date | null;
+        fecha_sorteo: string | Date | null;
         _count: {
             participantes: number;
         };
