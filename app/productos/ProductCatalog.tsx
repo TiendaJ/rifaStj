@@ -27,9 +27,11 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
     const pathname = usePathname();
 
     // Initialize from URL or default to 'all'
+    // Initialize from URL or default to 'all'
     const initialCategory = searchParams.get('categoria') || 'all';
+    const initialSearch = searchParams.get('q') || '';
     const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(initialSearch);
 
     // Sync state with URL params if they change externally (e.g. back button)
     useEffect(() => {
@@ -39,7 +41,40 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
         } else {
             setSelectedCategory('all');
         }
+
+        const q = searchParams.get('q');
+        if (q !== null && q !== searchQuery) {
+            setSearchQuery(q);
+        } else if (q === null && searchQuery !== '') {
+            // Optional: if user navigated back to a URL without 'q', clear search.
+            // But we need to be careful not to clear it while typing if debounce updates.
+            // The check q !== searchQuery handles most cases. 
+            // If q is null (not in URL) and searchQuery has value, it means either:
+            // 1. User typed, debounce pending.
+            // 2. User navigated to bare URL.
+            // We can safely set it to '' if we assume URL is truth.
+            setSearchQuery('');
+        }
     }, [searchParams]);
+
+    // Update URL when searchQuery changes (Debounced)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const params = new URLSearchParams(searchParams);
+            const currentQ = params.get('q') || '';
+
+            if (searchQuery !== currentQ) {
+                if (searchQuery) {
+                    params.set('q', searchQuery);
+                } else {
+                    params.delete('q');
+                }
+                router.push(`${pathname}?${params.toString()}`, { scroll: false });
+            }
+        }, 300); // 300ms delay
+
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const handleCategoryChange = (categoryId: string) => {
         setSelectedCategory(categoryId);
