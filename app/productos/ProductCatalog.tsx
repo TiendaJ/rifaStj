@@ -95,21 +95,21 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
     });
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-gray-50 py-6 md:py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Nuestros Productos</h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                <div className="text-center mb-6 md:mb-12">
+                    <h1 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-2 md:mb-4 tracking-tight">Nuestros Productos</h1>
+                    <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto">
                         Explora nuestra selección exclusiva de productos de alta calidad.
                     </p>
                 </div>
 
                 {/* Filters and Search */}
-                <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+                <div className="flex flex-col-reverse md:flex-row gap-4 mb-6 md:mb-8 items-center justify-between bg-white p-3 md:p-4 rounded-xl shadow-sm border border-gray-100 sticky top-0 md:static z-20 mx-[-1rem] md:mx-0 px-4 md:px-4">
+                    <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 no-scrollbar mask-linear-gradient">
                         <button
                             onClick={() => handleCategoryChange('all')}
-                            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === 'all'
+                            className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${selectedCategory === 'all'
                                 ? 'bg-black text-white shadow-md'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
@@ -120,7 +120,7 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                             <button
                                 key={cat.id}
                                 onClick={() => handleCategoryChange(cat.id)}
-                                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === cat.id
+                                className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${selectedCategory === cat.id
                                     ? 'bg-black text-white shadow-md'
                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
@@ -136,7 +136,7 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                             placeholder="Buscar productos..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none bg-gray-50 focus:bg-white transition-all"
+                            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none bg-gray-50 focus:bg-white transition-all"
                         />
                         <Search className="absolute left-3 top-2.5 text-gray-400 w-4 h-4" />
                     </div>
@@ -182,7 +182,7 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                                     {product.descripcion}
                                 </p>
                                 <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-50">
-                                    <span className="text-base font-bold text-gray-900">
+                                    <span className="text-sm md:text-base font-bold text-gray-900">
                                         S/ {product.precio.toFixed(2)}
                                     </span>
                                     <button
