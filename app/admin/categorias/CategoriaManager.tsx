@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { createCategoria, deleteCategoria, updateCategoria } from '@/app/actions/categorias';
-import { Pencil, Trash2, Plus, X } from 'lucide-react';
+import { Pencil, Trash2, Plus, X, Loader2 } from 'lucide-react';
 
 interface Categoria {
     id: string;
@@ -13,6 +13,7 @@ export default function CategoriaManager({ categorias }: { categorias: Categoria
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCategoria, setEditingCategoria] = useState<Categoria | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
@@ -40,11 +41,14 @@ export default function CategoriaManager({ categorias }: { categorias: Categoria
 
     const handleDelete = async (id: string) => {
         if (!confirm('¿Estás seguro de eliminar esta categoría?')) return;
+        setDeletingId(id);
         try {
             await deleteCategoria(id);
         } catch (error) {
             console.error(error);
             alert('Error al eliminar');
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -89,9 +93,10 @@ export default function CategoriaManager({ categorias }: { categorias: Categoria
                                         </button>
                                         <button
                                             onClick={() => handleDelete(cat.id)}
-                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            disabled={!!deletingId}
+                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                         >
-                                            <Trash2 size={18} />
+                                            {deletingId === cat.id ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
                                         </button>
                                     </div>
                                 </td>

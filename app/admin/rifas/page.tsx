@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { deleteRifa } from '@/app/actions/rifa';
 
 import RifaReportButton from './RifaReportButton';
+import DeleteButton from '@/app/components/admin/DeleteButton';
 
 export default async function RifasListPage() {
     const rifas = await prisma.rifa.findMany({
@@ -73,11 +74,7 @@ export default async function RifasListPage() {
                                     <Link href={`/admin/rifas/${rifa.id}`} className="text-black hover:text-gray-600 text-sm font-medium">
                                         Editar
                                     </Link>
-                                    <form action={deleteRifa.bind(null, rifa.id)}>
-                                        <button className="text-red-600 hover:text-red-800 text-sm font-medium ml-2">
-                                            Eliminar
-                                        </button>
-                                    </form>
+                                    <DeleteButton action={deleteRifa} id={rifa.id} />
                                 </td>
                             </tr>
                         ))}

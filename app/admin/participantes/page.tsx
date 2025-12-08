@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { deleteParticipante } from '@/app/actions/participante';
+import DeleteButton from '@/app/components/admin/DeleteButton';
 
 export default async function ParticipantesListPage({
     searchParams,
@@ -79,11 +80,7 @@ export default async function ParticipantesListPage({
                                     <Link href={`/admin/participantes/${p.id}`} className="text-black hover:text-gray-600 text-sm font-medium">
                                         Editar
                                     </Link>
-                                    <form action={deleteParticipante.bind(null, p.id)}>
-                                        <button className="text-red-600 hover:text-red-800 text-sm font-medium ml-2">
-                                            Bloquear
-                                        </button>
-                                    </form>
+                                    <DeleteButton action={deleteParticipante} id={p.id} label="Bloquear" />
                                 </td>
                             </tr>
                         ))}

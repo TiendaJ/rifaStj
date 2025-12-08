@@ -26,6 +26,7 @@ export default function ProductoManager({ productos, categorias }: { productos: 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProducto, setEditingProducto] = useState<Producto | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -36,11 +37,6 @@ export default function ProductoManager({ productos, categorias }: { productos: 
         try {
             let result;
             if (editingProducto) {
-                // Append existing photos textually
-                // We must handle existing photos carefully. The 'fotos' input only contains NEW files.
-                // The 'existing_fotos' must be passed for the server to know what to keep.
-
-                // Note: logic for existing videos/photos
                 editingProducto.fotos.forEach(foto => {
                     formData.append('existing_fotos', foto);
                 });
@@ -71,11 +67,14 @@ export default function ProductoManager({ productos, categorias }: { productos: 
 
     const handleDelete = async (id: string) => {
         if (!confirm('¿Estás seguro de eliminar este producto?')) return;
+        setDeletingId(id);
         try {
             await deleteProducto(id);
         } catch (error) {
             console.error(error);
             alert('Error al eliminar');
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -147,9 +146,14 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                                         </button>
                                         <button
                                             onClick={() => handleDelete(prod.id)}
-                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            disabled={!!deletingId}
+                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                         >
-                                            <Trash2 size={18} />
+                                            {deletingId === prod.id ? (
+                                                <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                                            ) : (
+                                                <Trash2 size={18} />
+                                            )}
                                         </button>
                                     </div>
                                 </td>
@@ -187,9 +191,14 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                                     </button>
                                     <button
                                         onClick={() => handleDelete(prod.id)}
-                                        className="p-1.5 text-red-600 bg-red-50 rounded-md"
+                                        disabled={!!deletingId}
+                                        className="p-1.5 text-red-600 bg-red-50 rounded-md disabled:opacity-50"
                                     >
-                                        <Trash2 size={16} />
+                                        {deletingId === prod.id ? (
+                                            <div className="w-3 h-3 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                                        ) : (
+                                            <Trash2 size={16} />
+                                        )}
                                     </button>
                                 </div>
                             </div>
