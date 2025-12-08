@@ -41,11 +41,59 @@ export default function ProductoManager({ productos, categorias, pagination }: {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
+    const uploadFileToSupabase = async (file: File): Promise<string> => {
+        const filename = `productos/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
+        const { error } = await supabase.storage
+            .from('rifas')
+            .upload(filename, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (error) {
+            console.error('Supabase upload error:', error);
+            throw new Error('Error al subir imagen/video');
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('rifas')
+            .getPublicUrl(filename);
+
+        return publicUrl;
+    };
+
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
         try {
+            // Intercept files and upload client-side
+            const fotoFiles = formData.getAll('fotos').filter((f): f is File => f instanceof File && f.size > 0);
+            const videoFiles = formData.getAll('videos').filter((f): f is File => f instanceof File && f.size > 0);
+
+            // Remove raw files from formData to avoid payload limit
+            formData.delete('fotos');
+            formData.delete('videos');
+
+            // Upload new photos
+            const uploadedFotoUrls: string[] = [];
+            for (const file of fotoFiles) {
+                const url = await uploadFileToSupabase(file);
+                uploadedFotoUrls.push(url);
+            }
+
+            // Upload new videos
+            const uploadedVideoUrls: string[] = [];
+            for (const file of videoFiles) {
+                const url = await uploadFileToSupabase(file);
+                uploadedVideoUrls.push(url);
+            }
+
+            // Append uploaded URLs (new ones)
+            uploadedFotoUrls.forEach(url => formData.append('fotos', url));
+            uploadedVideoUrls.forEach(url => formData.append('videos', url));
+
             let result;
             if (editingProducto) {
+                // Existing media handling
                 editingProducto.fotos.forEach(foto => {
                     formData.append('existing_fotos', foto);
                 });
