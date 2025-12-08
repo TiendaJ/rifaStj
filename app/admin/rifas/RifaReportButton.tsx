@@ -2,10 +2,6 @@
 
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
-'use client';
-
-import jsPDF from 'jspdf';
-import QRCode from 'qrcode';
 import { FileDown } from 'lucide-react';
 
 interface Rifa {
