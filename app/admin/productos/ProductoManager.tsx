@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createProducto, deleteProducto, updateProducto } from '@/app/actions/productos';
+import { createClient } from '@supabase/supabase-js';
 import { Pencil, Trash2, Plus, X, Image as ImageIcon } from 'lucide-react';
 
 interface Categoria {
@@ -25,16 +26,64 @@ export default function ProductoManager({ productos, categorias }: { productos: 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProducto, setEditingProducto] = useState<Producto | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    // Helper to upload a single file to Supabase
+    const uploadFileToSupabase = async (file: File) => {
+        const filename = `productos/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
+        const { error } = await supabase.storage
+            .from('rifas') // Assuming 'rifas' bucket is used
+            .upload(filename, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (error) {
+            console.error('Supabase upload error:', error);
+            throw new Error(`Error al subir imagen: ${file.name}`);
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('rifas')
+            .getPublicUrl(filename);
+
+        return publicUrl;
+    };
 
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
         try {
+            // Extract files from FormData
+            const fotoFiles = formData.getAll('fotos').filter(f => f instanceof File && f.size > 0) as File[];
+            const videoFiles = formData.getAll('videos').filter(f => f instanceof File && f.size > 0) as File[];
+
+            // Remove files from FormData to prevent large payload to Server Action
+            formData.delete('fotos');
+            formData.delete('videos');
+
+            // Upload photos directly to Supabase
+            for (const file of fotoFiles) {
+                const url = await uploadFileToSupabase(file);
+                formData.append('fotos', url); // Append URL as string
+            }
+
+            // Upload videos directly to Supabase
+            for (const file of videoFiles) {
+                const url = await uploadFileToSupabase(file);
+                formData.append('videos', url); // Append URL as string
+            }
+
             let result;
             if (editingProducto) {
-                // Append existing photos and videos
+                // Append existing photos textually if not already handled
+                // (Note: Server action expects 'existing_fotos' for what was already there)
                 editingProducto.fotos.forEach(foto => {
                     formData.append('existing_fotos', foto);
                 });
+
                 if (editingProducto.videos) {
                     editingProducto.videos.forEach(video => {
                         formData.append('existing_videos', video);
@@ -53,7 +102,7 @@ export default function ProductoManager({ productos, categorias }: { productos: 
             }
         } catch (error) {
             console.error(error);
-            alert('Error al guardar el producto');
+            alert('Error al guardar el producto: ' + (error instanceof Error ? error.message : 'Unknown error'));
         } finally {
             setIsLoading(false);
         }

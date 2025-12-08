@@ -58,41 +58,26 @@ export async function getProductoById(id: string) {
     }
 }
 
+// Helper function to extract array of strings from FormData
+// Often FormData.getAll returns string | File, we expect strings here for URLs
+function getUrlsFromFormData(formData: FormData, key: string): string[] {
+    const entries = formData.getAll(key);
+    return entries.map(entry => entry.toString()).filter(url => url.length > 0);
+}
+
 export async function createProducto(formData: FormData) {
     const nombre = formData.get('nombre') as string;
     const descripcion = formData.get('descripcion') as string;
     const precio = parseFloat(formData.get('precio') as string);
     const cantidad = parseInt(formData.get('cantidad') as string);
     const categoria_id = formData.get('categoria_id') as string;
-    const files = formData.getAll('fotos') as File[];
-    const videoFiles = formData.getAll('videos') as File[];
+
+    // We expect the client to upload files and send us URLs
+    const fotos = getUrlsFromFormData(formData, 'fotos');
+    const videos = getUrlsFromFormData(formData, 'videos');
 
     if (!nombre || !descripcion || isNaN(precio) || isNaN(cantidad) || !categoria_id) {
         return { error: 'Faltan campos requeridos' };
-    }
-
-    const uploadedUrls: string[] = [];
-    for (const file of files) {
-        if (file.size > 0) {
-            try {
-                const url = await uploadImage(file);
-                if (url) uploadedUrls.push(url);
-            } catch (e) {
-                console.error("Failed to upload image", e);
-            }
-        }
-    }
-
-    const uploadedVideoUrls: string[] = [];
-    for (const file of videoFiles) {
-        if (file.size > 0) {
-            try {
-                const url = await uploadImage(file); // Reusing uploadImage for videos
-                if (url) uploadedVideoUrls.push(url);
-            } catch (e) {
-                console.error("Failed to upload video", e);
-            }
-        }
     }
 
     try {
@@ -103,9 +88,9 @@ export async function createProducto(formData: FormData) {
                 precio,
                 cantidad,
                 categoria_id,
-                fotos: uploadedUrls,
+                fotos: fotos,
                 // @ts-ignore
-                videos: uploadedVideoUrls,
+                videos: videos,
             },
         });
         revalidatePath('/admin/productos');
@@ -122,41 +107,25 @@ export async function updateProducto(id: string, formData: FormData) {
     const precio = parseFloat(formData.get('precio') as string);
     const cantidad = parseInt(formData.get('cantidad') as string);
     const categoria_id = formData.get('categoria_id') as string;
-    const files = formData.getAll('fotos') as File[];
-    const existingFotos = formData.getAll('existing_fotos') as string[];
-    const videoFiles = formData.getAll('videos') as File[];
-    const existingVideos = formData.getAll('existing_videos') as string[];
+
+    // For updates, we might have existing URLs plus new ones
+    // The client should consolidate everything into 'fotos' and 'videos' arrays (as strings)
+    // or we can continue to support 'existing_fotos' if the client sends them separately.
+    // Ideally, the client just sends the final list of URLs in 'fotos' and 'videos'.
+    // Let's support both 'fotos' (new URLs) + 'existing_fotos' for backward compatibility or ease of client logic
+
+    const newFotos = getUrlsFromFormData(formData, 'fotos');
+    const existingFotos = getUrlsFromFormData(formData, 'existing_fotos');
+    const finalFotos = [...existingFotos, ...newFotos];
+
+    const newVideos = getUrlsFromFormData(formData, 'videos');
+    const existingVideos = getUrlsFromFormData(formData, 'existing_videos');
+    const finalVideos = [...existingVideos, ...newVideos];
+
 
     if (!nombre || !descripcion || isNaN(precio) || isNaN(cantidad) || !categoria_id) {
         return { error: 'Faltan campos requeridos' };
     }
-
-    const uploadedUrls: string[] = [];
-    for (const file of files) {
-        if (file.size > 0) {
-            try {
-                const url = await uploadImage(file);
-                if (url) uploadedUrls.push(url);
-            } catch (e) {
-                console.error("Failed to upload image", e);
-            }
-        }
-    }
-
-    const uploadedVideoUrls: string[] = [];
-    for (const file of videoFiles) {
-        if (file.size > 0) {
-            try {
-                const url = await uploadImage(file);
-                if (url) uploadedVideoUrls.push(url);
-            } catch (e) {
-                console.error("Failed to upload video", e);
-            }
-        }
-    }
-
-    const finalFotos = [...existingFotos, ...uploadedUrls];
-    const finalVideos = [...existingVideos, ...uploadedVideoUrls];
 
     try {
         await prisma.producto.update({
