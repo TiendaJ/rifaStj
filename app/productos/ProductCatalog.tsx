@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 interface Categoria {
     id: string;
@@ -21,8 +22,35 @@ interface Producto {
 }
 
 export default function ProductCatalog({ productos, categorias }: { productos: Producto[], categorias: Categoria[] }) {
-    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    // Initialize from URL or default to 'all'
+    const initialCategory = searchParams.get('categoria') || 'all';
+    const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Sync state with URL params if they change externally (e.g. back button)
+    useEffect(() => {
+        const cat = searchParams.get('categoria');
+        if (cat) {
+            setSelectedCategory(cat);
+        } else {
+            setSelectedCategory('all');
+        }
+    }, [searchParams]);
+
+    const handleCategoryChange = (categoryId: string) => {
+        setSelectedCategory(categoryId);
+        const params = new URLSearchParams(searchParams);
+        if (categoryId === 'all') {
+            params.delete('categoria');
+        } else {
+            params.set('categoria', categoryId);
+        }
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    };
 
     const filteredProducts = productos.filter(product => {
         const matchesCategory = selectedCategory === 'all' || product.categoria_id === selectedCategory;
@@ -45,7 +73,7 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                 <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
                         <button
-                            onClick={() => setSelectedCategory('all')}
+                            onClick={() => handleCategoryChange('all')}
                             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === 'all'
                                 ? 'bg-black text-white shadow-md'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -56,7 +84,7 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                         {categorias.map(cat => (
                             <button
                                 key={cat.id}
-                                onClick={() => setSelectedCategory(cat.id)}
+                                onClick={() => handleCategoryChange(cat.id)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === cat.id
                                     ? 'bg-black text-white shadow-md'
                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -141,9 +169,8 @@ export default function ProductCatalog({ productos, categorias }: { productos: P
                             <Search className="text-gray-400 w-8 h-8" />
                         </div>
                         <h3 className="text-lg font-medium text-gray-900">No se encontraron productos</h3>
-                        <p className="text-gray-500 mt-1">Intenta con otra categoría o término de búsqueda.</p>
                         <button
-                            onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                            onClick={() => { handleCategoryChange('all'); setSearchQuery(''); }}
                             className="mt-4 text-indigo-600 font-medium hover:text-indigo-800"
                         >
                             Limpiar filtros
