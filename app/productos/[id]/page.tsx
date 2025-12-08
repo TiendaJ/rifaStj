@@ -2,6 +2,7 @@ import { getProductoById } from '@/app/actions/productos';
 import { notFound } from 'next/navigation';
 import { ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import ProductActions from './ProductActions';
 import ProductMediaGallery from './ProductMediaGallery';
 
 export const dynamic = 'force-dynamic';
