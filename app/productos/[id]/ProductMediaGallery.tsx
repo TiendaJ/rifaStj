@@ -12,8 +12,8 @@ interface ProductMediaGalleryProps {
 
 export default function ProductMediaGallery({ nombre, fotos, videos = [], isSoldOut }: ProductMediaGalleryProps) {
     const allMedia = [
-        ...fotos.map(src => ({ type: 'image' as const, src })),
-        ...videos.map(src => ({ type: 'video' as const, src }))
+        ...videos.map(src => ({ type: 'video' as const, src })),
+        ...fotos.map(src => ({ type: 'image' as const, src }))
     ];
 
     const [activeIndex, setActiveIndex] = useState(0);
