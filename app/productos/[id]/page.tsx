@@ -16,7 +16,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     }
 
     const whatsappMessage = `Hola, estoy interesado en el producto *${producto.nombre}* que vi en Jshop.`;
-    const whatsappLink = `https://wa.me/51999999999?text=${encodeURIComponent(whatsappMessage)}`; // Replace with actual number
+    const whatsappLink = `https://wa.me/51951381439?text=${encodeURIComponent(whatsappMessage)}`;
 
     return (
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
