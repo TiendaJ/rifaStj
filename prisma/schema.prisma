@@ -74,6 +74,7 @@ model Producto {
   precio       Float
   cantidad     Int
   fotos        String[]
+  videos       String[]
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
 

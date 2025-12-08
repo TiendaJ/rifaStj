@@ -65,6 +65,7 @@ export async function createProducto(formData: FormData) {
     const cantidad = parseInt(formData.get('cantidad') as string);
     const categoria_id = formData.get('categoria_id') as string;
     const files = formData.getAll('fotos') as File[];
+    const videoFiles = formData.getAll('videos') as File[];
 
     if (!nombre || !descripcion || isNaN(precio) || isNaN(cantidad) || !categoria_id) {
         return { error: 'Faltan campos requeridos' };
@@ -82,6 +83,18 @@ export async function createProducto(formData: FormData) {
         }
     }
 
+    const uploadedVideoUrls: string[] = [];
+    for (const file of videoFiles) {
+        if (file.size > 0) {
+            try {
+                const url = await uploadImage(file); // Reusing uploadImage for videos
+                if (url) uploadedVideoUrls.push(url);
+            } catch (e) {
+                console.error("Failed to upload video", e);
+            }
+        }
+    }
+
     try {
         await prisma.producto.create({
             data: {
@@ -91,6 +104,8 @@ export async function createProducto(formData: FormData) {
                 cantidad,
                 categoria_id,
                 fotos: uploadedUrls,
+                // @ts-ignore
+                videos: uploadedVideoUrls,
             },
         });
         revalidatePath('/admin/productos');
@@ -109,6 +124,8 @@ export async function updateProducto(id: string, formData: FormData) {
     const categoria_id = formData.get('categoria_id') as string;
     const files = formData.getAll('fotos') as File[];
     const existingFotos = formData.getAll('existing_fotos') as string[];
+    const videoFiles = formData.getAll('videos') as File[];
+    const existingVideos = formData.getAll('existing_videos') as string[];
 
     if (!nombre || !descripcion || isNaN(precio) || isNaN(cantidad) || !categoria_id) {
         return { error: 'Faltan campos requeridos' };
@@ -126,7 +143,20 @@ export async function updateProducto(id: string, formData: FormData) {
         }
     }
 
+    const uploadedVideoUrls: string[] = [];
+    for (const file of videoFiles) {
+        if (file.size > 0) {
+            try {
+                const url = await uploadImage(file);
+                if (url) uploadedVideoUrls.push(url);
+            } catch (e) {
+                console.error("Failed to upload video", e);
+            }
+        }
+    }
+
     const finalFotos = [...existingFotos, ...uploadedUrls];
+    const finalVideos = [...existingVideos, ...uploadedVideoUrls];
 
     try {
         await prisma.producto.update({
@@ -138,6 +168,8 @@ export async function updateProducto(id: string, formData: FormData) {
                 cantidad,
                 categoria_id,
                 fotos: finalFotos,
+                // @ts-ignore
+                videos: finalVideos,
             },
         });
         revalidatePath('/admin/productos');

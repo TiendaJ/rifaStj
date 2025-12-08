@@ -17,6 +17,7 @@ interface Producto {
     cantidad: number;
     categoria_id: string;
     fotos: string[];
+    videos?: string[];
     categoria?: Categoria;
 }
 
@@ -30,11 +31,15 @@ export default function ProductoManager({ productos, categorias }: { productos: 
         try {
             let result;
             if (editingProducto) {
-                // Append existing photos if needed, handled in server action via hidden inputs or logic
-                // Actually, server action expects 'existing_fotos'
+                // Append existing photos and videos
                 editingProducto.fotos.forEach(foto => {
                     formData.append('existing_fotos', foto);
                 });
+                if (editingProducto.videos) {
+                    editingProducto.videos.forEach(video => {
+                        formData.append('existing_videos', video);
+                    });
+                }
                 result = await updateProducto(editingProducto.id, formData);
             } else {
                 result = await createProducto(formData);
@@ -244,6 +249,38 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                                                         }}
                                                         className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600"
                                                         title="Eliminar foto"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Videos</label>
+                                    <input
+                                        name="videos"
+                                        type="file"
+                                        multiple
+                                        accept="video/*"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">Puedes seleccionar múltiples videos.</p>
+
+                                    {editingProducto && editingProducto.videos && editingProducto.videos.length > 0 && (
+                                        <div className="mt-2 flex gap-2 overflow-x-auto pb-2">
+                                            {editingProducto.videos.map((video, idx) => (
+                                                <div key={idx} className="relative w-32 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 group bg-gray-100">
+                                                    <video src={video} className="w-full h-full object-cover" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const newVideos = (editingProducto.videos || []).filter((_, i) => i !== idx);
+                                                            setEditingProducto({ ...editingProducto, videos: newVideos });
+                                                        }}
+                                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600 z-10"
+                                                        title="Eliminar video"
                                                     >
                                                         <X size={12} />
                                                     </button>

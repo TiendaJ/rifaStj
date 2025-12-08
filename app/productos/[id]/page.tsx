@@ -2,13 +2,13 @@ import { getProductoById } from '@/app/actions/productos';
 import { notFound } from 'next/navigation';
 import { ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
-import ProductActions from './ProductActions';
+import ProductMediaGallery from './ProductMediaGallery';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
     const { id } = await params;
-    const producto = await getProductoById(id);
+    const producto = await getProductoById(id) as any; // Cast to any to access 'videos' until schema is synced
 
     if (!producto) {
         notFound();
@@ -30,24 +30,14 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-                        {/* Product Image */}
-                        <div className="bg-gray-100 aspect-square relative">
-                            {producto.fotos && producto.fotos.length > 0 ? (
-                                <img
-                                    src={producto.fotos[0]}
-                                    alt={producto.nombre}
-                                    className="w-full h-full object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                    <ShoppingBag size={64} opacity={0.2} />
-                                </div>
-                            )}
-                            {producto.cantidad <= 0 && (
-                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                    <span className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">Agotado</span>
-                                </div>
-                            )}
+                        {/* Product Media Gallery */}
+                        <div>
+                            <ProductMediaGallery
+                                nombre={producto.nombre}
+                                fotos={producto.fotos || []}
+                                videos={producto.videos || []}
+                                isSoldOut={producto.cantidad <= 0}
+                            />
                         </div>
 
                         {/* Product Details */}
