@@ -62,7 +62,18 @@ export async function getProductoById(id: string) {
 // Often FormData.getAll returns string | File, we expect strings here for URLs
 function getUrlsFromFormData(formData: FormData, key: string): string[] {
     const entries = formData.getAll(key);
-    return entries.map(entry => entry.toString()).filter(url => url.length > 0);
+    return entries.map(entry => entry.toString()).filter(url => url.length > 0 && !url.startsWith('[object '));
+}
+
+async function uploadFiles(formData: FormData, key: string): Promise<string[]> {
+    const files = formData.getAll(key).filter((f): f is File => f instanceof File && f.size > 0);
+    const urls: string[] = [];
+
+    for (const file of files) {
+        const url = await uploadImage(file);
+        if (url) urls.push(url);
+    }
+    return urls;
 }
 
 export async function createProducto(formData: FormData) {
@@ -72,9 +83,14 @@ export async function createProducto(formData: FormData) {
     const cantidad = parseInt(formData.get('cantidad') as string);
     const categoria_id = formData.get('categoria_id') as string;
 
-    // We expect the client to upload files and send us URLs
-    const fotos = getUrlsFromFormData(formData, 'fotos');
-    const videos = getUrlsFromFormData(formData, 'videos');
+    const uploadedFotos = await uploadFiles(formData, 'fotos');
+    // Also support string URLs if any (hybrid approach)
+    const stringFotos = getUrlsFromFormData(formData, 'fotos');
+    const fotos = [...uploadedFotos, ...stringFotos];
+
+    const uploadedVideos = await uploadFiles(formData, 'videos');
+    const stringVideos = getUrlsFromFormData(formData, 'videos');
+    const videos = [...uploadedVideos, ...stringVideos];
 
     if (!nombre || !descripcion || isNaN(precio) || isNaN(cantidad) || !categoria_id) {
         return { error: 'Faltan campos requeridos' };
@@ -108,19 +124,16 @@ export async function updateProducto(id: string, formData: FormData) {
     const cantidad = parseInt(formData.get('cantidad') as string);
     const categoria_id = formData.get('categoria_id') as string;
 
-    // For updates, we might have existing URLs plus new ones
-    // The client should consolidate everything into 'fotos' and 'videos' arrays (as strings)
-    // or we can continue to support 'existing_fotos' if the client sends them separately.
-    // Ideally, the client just sends the final list of URLs in 'fotos' and 'videos'.
-    // Let's support both 'fotos' (new URLs) + 'existing_fotos' for backward compatibility or ease of client logic
-
-    const newFotos = getUrlsFromFormData(formData, 'fotos');
+    const uploadedFotos = await uploadFiles(formData, 'fotos');
     const existingFotos = getUrlsFromFormData(formData, 'existing_fotos');
-    const finalFotos = [...existingFotos, ...newFotos];
+    // Also include any 'fotos' that were passed as strings (unlikely but possible)
+    const stringFotos = getUrlsFromFormData(formData, 'fotos');
+    const finalFotos = [...existingFotos, ...uploadedFotos, ...stringFotos];
 
-    const newVideos = getUrlsFromFormData(formData, 'videos');
+    const uploadedVideos = await uploadFiles(formData, 'videos');
     const existingVideos = getUrlsFromFormData(formData, 'existing_videos');
-    const finalVideos = [...existingVideos, ...newVideos];
+    const stringVideos = getUrlsFromFormData(formData, 'videos');
+    const finalVideos = [...existingVideos, ...uploadedVideos, ...stringVideos];
 
 
     if (!nombre || !descripcion || isNaN(precio) || isNaN(cantidad) || !categoria_id) {

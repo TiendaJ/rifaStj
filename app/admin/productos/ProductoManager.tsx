@@ -31,55 +31,16 @@ export default function ProductoManager({ productos, categorias }: { productos: 
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    // Helper to upload a single file to Supabase
-    const uploadFileToSupabase = async (file: File) => {
-        const filename = `productos/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-        const { error } = await supabase.storage
-            .from('rifas') // Assuming 'rifas' bucket is used
-            .upload(filename, file, {
-                cacheControl: '3600',
-                upsert: false
-            });
-
-        if (error) {
-            console.error('Supabase upload error:', error);
-            throw new Error(`Error al subir imagen: ${file.name}`);
-        }
-
-        const { data: { publicUrl } } = supabase.storage
-            .from('rifas')
-            .getPublicUrl(filename);
-
-        return publicUrl;
-    };
-
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
         try {
-            // Extract files from FormData
-            const fotoFiles = formData.getAll('fotos').filter(f => f instanceof File && f.size > 0) as File[];
-            const videoFiles = formData.getAll('videos').filter(f => f instanceof File && f.size > 0) as File[];
-
-            // Remove files from FormData to prevent large payload to Server Action
-            formData.delete('fotos');
-            formData.delete('videos');
-
-            // Upload photos directly to Supabase
-            for (const file of fotoFiles) {
-                const url = await uploadFileToSupabase(file);
-                formData.append('fotos', url); // Append URL as string
-            }
-
-            // Upload videos directly to Supabase
-            for (const file of videoFiles) {
-                const url = await uploadFileToSupabase(file);
-                formData.append('videos', url); // Append URL as string
-            }
-
             let result;
             if (editingProducto) {
-                // Append existing photos textually if not already handled
-                // (Note: Server action expects 'existing_fotos' for what was already there)
+                // Append existing photos textually
+                // We must handle existing photos carefully. The 'fotos' input only contains NEW files.
+                // The 'existing_fotos' must be passed for the server to know what to keep.
+
+                // Note: logic for existing videos/photos
                 editingProducto.fotos.forEach(foto => {
                     formData.append('existing_fotos', foto);
                 });
@@ -134,7 +95,8 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                 </button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
                 <table className="w-full text-left">
                     <thead className="bg-gray-50 border-b border-gray-200">
                         <tr>
@@ -193,15 +155,62 @@ export default function ProductoManager({ productos, categorias }: { productos: 
                                 </td>
                             </tr>
                         ))}
-                        {productos.length === 0 && (
-                            <tr>
-                                <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                                    No hay productos registrados
-                                </td>
-                            </tr>
-                        )}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="grid grid-cols-1 gap-4 md:hidden">
+                {productos.map((prod) => (
+                    <div key={prod.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex gap-4">
+                        <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                            {prod.fotos && prod.fotos.length > 0 ? (
+                                <img src={prod.fotos[0]} alt={prod.nombre} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                    <ImageIcon size={24} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-start mb-1">
+                                <h3 className="font-medium text-gray-900 truncate pr-2">{prod.nombre}</h3>
+                                <div className="flex gap-1 flex-shrink-0">
+                                    <button
+                                        onClick={() => {
+                                            setEditingProducto(prod);
+                                            setIsModalOpen(true);
+                                        }}
+                                        className="p-1.5 text-blue-600 bg-blue-50 rounded-md"
+                                    >
+                                        <Pencil size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(prod.id)}
+                                        className="p-1.5 text-red-600 bg-red-50 rounded-md"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-500 line-clamp-1 mb-2">{prod.descripcion}</p>
+                            <div className="flex items-center justify-between mt-auto">
+                                <span className="bg-gray-100 px-2 py-0.5 rounded text-xs font-medium text-gray-600">
+                                    {prod.categoria?.descripcion || 'General'}
+                                </span>
+                                <div className="text-right">
+                                    <div className="font-bold text-gray-900">S/ {prod.precio.toFixed(2)}</div>
+                                    <div className="text-xs text-gray-500">Stock: {prod.cantidad}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                {productos.length === 0 && (
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center text-gray-500">
+                        No hay productos registrados
+                    </div>
+                )}
             </div>
 
             {isModalOpen && (
