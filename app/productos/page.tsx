@@ -4,17 +4,23 @@ import ProductCatalog from './ProductCatalog';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ProductosPage() {
+export default async function ProductosPage({ searchParams }: { searchParams: Promise<{ q?: string; category?: string; page?: string; limit?: string }> }) {
+    const params = await searchParams;
+    const q = params.q || '';
+    const category = params.category || 'all';
+    const page = parseInt(params.page || '1');
+    const limit = parseInt(params.limit || '12');
+
     const [productosData, categorias] = await Promise.all([
-        getProductos('', 'all', 1, 10000),
+        getProductos(q, category, page, limit),
         getCategorias()
     ]);
 
-    // Safety check if getProductos returns array (old behavior) or object (new behavior)
-    // Based on recent changes, it returns { productos, pagination }
-    const productos = Array.isArray(productosData) ? productosData : productosData.productos;
+    const productos = productosData.productos;
+    const pagination = productosData.pagination;
 
     return (
-        <ProductCatalog productos={productos} categorias={categorias} />
+        <ProductCatalog productos={productos} categorias={categorias} pagination={pagination} />
     );
 }
+
