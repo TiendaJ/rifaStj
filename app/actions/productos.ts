@@ -70,6 +70,24 @@ export async function getProductos(query?: string, categoriaId?: string, page: n
     }
 }
 
+export async function getRelatedProducts(categoriaId: string, currentProductId: string, limit: number = 4) {
+    try {
+        const productos = await prisma.producto.findMany({
+            where: {
+                categoria_id: categoriaId,
+                id: { not: currentProductId }
+            },
+            include: { categoria: true },
+            take: limit,
+            orderBy: { created_at: 'desc' }
+        });
+        return productos;
+    } catch (error) {
+        console.error('Error fetching related products:', error);
+        return [];
+    }
+}
+
 export async function getProductoById(id: string) {
     try {
         const producto = await prisma.producto.findUnique({

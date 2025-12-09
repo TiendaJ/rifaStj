@@ -77,7 +77,72 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         </div>
                     </div>
                 </div>
+
+                {/* Related Products Section */}
+                <div className="mt-12 md:mt-16">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 px-4 md:px-0">Productos Relacionados</h2>
+                    <RelatedProductsList categoriaId={producto.categoria_id} currentProductId={producto.id} />
+                </div>
             </div>
+        </div>
+    );
+}
+
+// Related Products Component (Client or Server Component is fine, let's keep it here for simplicity)
+import { getRelatedProducts } from '@/app/actions/productos';
+
+async function RelatedProductsList({ categoriaId, currentProductId }: { categoriaId: string, currentProductId: string }) {
+    const relatedProducts = await getRelatedProducts(categoriaId, currentProductId);
+
+    if (relatedProducts.length === 0) return null;
+
+    return (
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 px-4 md:px-0">
+            {relatedProducts.map(product => (
+                <Link
+                    href={`/productos/${product.id}`}
+                    key={product.id}
+                    className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col h-full cursor-pointer"
+                >
+                    <div className="relative aspect-square overflow-hidden bg-gray-100">
+                        {product.fotos && product.fotos.length > 0 ? (
+                            <img
+                                src={product.fotos[0]}
+                                alt={product.nombre}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                <ShoppingBag size={48} opacity={0.2} />
+                            </div>
+                        )}
+                        {product.cantidad <= 0 && (
+                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Agotado</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="p-3 flex flex-col flex-grow">
+                        <div className="mb-1">
+                            <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 px-1.5 py-0.5 rounded-md">
+                                {product.categoria?.descripcion || 'General'}
+                            </span>
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                            {product.nombre}
+                        </h3>
+                        <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-50">
+                            <span className="text-sm md:text-base font-bold text-gray-900">
+                                S/ {product.precio.toFixed(2)}
+                            </span>
+                            <div className="bg-black text-white p-1.5 rounded-full hover:bg-gray-800 transition-colors">
+                                <ShoppingBag size={14} />
+                            </div>
+                        </div>
+                    </div>
+                </Link>
+            ))}
         </div>
     );
 }
