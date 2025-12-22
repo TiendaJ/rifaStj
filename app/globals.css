@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #FFFFFF;
   --foreground: #000000;
-  --accents-1: #fafafa;
-  --accents-2: #eaeaea;
-  --accents-3: #999999;
-  --accents-4: #888888;
-  --accents-5: #666666;
-  --accents-6: #444444;
-  --accents-7: #333333;
-  --accents-8: #111111;
+  
+  /* New System Colors */
+  --black: #000000;
+  --white: #FFFFFF;
+  --gray-light: #F5F5F5;
+  --gray-text: #6B6B6B;
+  --accent-primary: #FF4D00;
+  --accent-secondary: #007BFF;
 }
 
 @theme inline {
