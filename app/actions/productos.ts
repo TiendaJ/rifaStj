@@ -32,14 +32,34 @@ async function uploadImage(file: File): Promise<string | null> {
     return publicUrl;
 }
 
-export async function getProductos(query?: string, categoriaId?: string, page: number = 1, limit: number = 10) {
+export async function getProductos(
+    query?: string,
+    categoriaId?: string,
+    minPrice?: number,
+    maxPrice?: number,
+    marca?: string,
+    page: number = 1,
+    limit: number = 10
+) {
     try {
         const where: any = {};
         if (query) {
-            where.nombre = { contains: query, mode: 'insensitive' }; // Prisma specific for case insensitive
+            where.nombre = { contains: query, mode: 'insensitive' };
         }
         if (categoriaId && categoriaId !== 'all') {
             where.categoria_id = categoriaId;
+        }
+
+        // Price Filter
+        if (minPrice !== undefined || maxPrice !== undefined) {
+            where.precio = {};
+            if (minPrice !== undefined) where.precio.gte = minPrice;
+            if (maxPrice !== undefined) where.precio.lte = maxPrice;
+        }
+
+        // Brand Filter
+        if (marca && marca !== 'all') {
+            where.marca = { equals: marca, mode: 'insensitive' };
         }
 
         const skip = (page - 1) * limit;
@@ -67,6 +87,23 @@ export async function getProductos(query?: string, categoriaId?: string, page: n
     } catch (error) {
         console.error('Error fetching productos:', error);
         return { productos: [], pagination: { total: 0, page: 1, limit: 10, totalPages: 0 } };
+    }
+}
+
+export async function getMarcas() {
+    try {
+        // Group by marca to get distinct values
+        const marcas = await prisma.producto.groupBy({
+            by: ['marca'],
+            where: {
+                marca: { not: null }
+            }
+        });
+        // Filter out nulls and empty strings just in case
+        return marcas.map(m => m.marca).filter(Boolean) as string[];
+    } catch (error) {
+        console.error('Error fetching marcas:', error);
+        return [];
     }
 }
 

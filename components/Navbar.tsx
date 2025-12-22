@@ -24,36 +24,41 @@ export function Navbar({ session }: NavbarProps) {
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-                    <Link href="/" className="text-gray-600 hover:text-black transition-colors">
-                        Rifas
+                <nav className="hidden md:flex items-center gap-6 text-sm font-bold uppercase tracking-wider">
+                    <Link href="/" className="hover:text-black transition-colors">
+                        Inicio
                     </Link>
-                    <Link href="/productos" className="text-gray-600 hover:text-black transition-colors">
-                        Productos
+                    <Link href="/productos?q=celular" className="hover:text-black transition-colors">
+                        Celulares
                     </Link>
-                    <Link href="/como-funciona" className="text-gray-600 hover:text-black transition-colors">
-                        Cómo Funciona
+                    <Link href="/productos?q=accesorios" className="hover:text-black transition-colors">
+                        Accesorios
+                    </Link>
+                    <Link href="/productos?q=oferta" className="text-red-600 hover:text-red-700 transition-colors">
+                        Ofertas
+                    </Link>
+                    <Link href="/productos" className="hover:text-black transition-colors">
+                        Ver Tienda
                     </Link>
                     {!session ? (
-                        <Link href="/login" className="text-gray-600 hover:text-black transition-colors flex items-center gap-2">
+                        <Link href="/login" className="hover:text-black transition-colors flex items-center gap-2 ml-4">
                             <LogIn className="w-4 h-4" />
-                            <span>Iniciar Sesión</span>
+                            <span>Entrar</span>
                         </Link>
                     ) : (
                         <>
                             <Link
                                 href={session.role === 'admin' ? "/admin/rifas" : "/mis-inscripciones"}
-                                className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
+                                className="hover:text-black transition-colors flex items-center gap-2 ml-4"
                             >
                                 <User className="w-4 h-4" />
-                                <span>{session.role === 'admin' ? 'Admin' : 'Mis Rifas'}</span>
+                                <span>{session.role === 'admin' ? 'Admin' : 'Mi Cuenta'}</span>
                             </Link>
                             <button
                                 onClick={() => logout()}
-                                className="text-gray-600 hover:text-black transition-colors flex items-center gap-2"
+                                className="hover:text-black transition-colors flex items-center gap-2"
                             >
                                 <LogOut className="w-4 h-4" />
-                                <span>Cerrar Sesión</span>
                             </button>
                         </>
                     )}
@@ -71,53 +76,67 @@ export function Navbar({ session }: NavbarProps) {
             {/* Mobile Nav */}
             {isOpen && (
                 <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 shadow-lg">
-                    <nav className="flex flex-col gap-4 text-sm font-medium">
+                    <nav className="flex flex-col gap-4 text-sm font-bold uppercase tracking-wider text-gray-800">
                         <Link
                             href="/"
-                            className="text-gray-600 hover:text-black transition-colors py-2"
+                            className="hover:text-black transition-colors py-2"
                             onClick={() => setIsOpen(false)}
                         >
-                            Rifas
+                            Inicio
+                        </Link>
+                        <Link
+                            href="/productos?q=celular"
+                            className="hover:text-black transition-colors py-2"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            Celulares
+                        </Link>
+                        <Link
+                            href="/productos?q=accesorios"
+                            className="hover:text-black transition-colors py-2"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            Accesorios
+                        </Link>
+                        <Link
+                            href="/productos?q=oferta"
+                            className="text-red-600 hover:text-red-700 transition-colors py-2"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            Ofertas
                         </Link>
                         <Link
                             href="/productos"
-                            className="text-gray-600 hover:text-black transition-colors py-2"
+                            className="hover:text-black transition-colors py-2"
                             onClick={() => setIsOpen(false)}
                         >
-                            Productos
-                        </Link>
-                        <Link
-                            href="/como-funciona"
-                            className="text-gray-600 hover:text-black transition-colors py-2"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Cómo Funciona
+                            Ver Tienda
                         </Link>
                         {!session ? (
                             <Link
                                 href="/login"
-                                className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 py-2"
+                                className="hover:text-black transition-colors flex items-center gap-2 py-2"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <LogIn className="w-4 h-4" />
-                                <span>Iniciar Sesión</span>
+                                <span>Entrar</span>
                             </Link>
                         ) : (
                             <>
                                 <Link
                                     href={session.role === 'admin' ? "/admin/rifas" : "/mis-inscripciones"}
-                                    className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 py-2"
+                                    className="hover:text-black transition-colors flex items-center gap-2 py-2"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     <User className="w-4 h-4" />
-                                    <span>{session.role === 'admin' ? 'Admin' : 'Mis Rifas'}</span>
+                                    <span>{session.role === 'admin' ? 'Admin' : 'Mi Cuenta'}</span>
                                 </Link>
                                 <button
                                     onClick={() => {
                                         logout();
                                         setIsOpen(false);
                                     }}
-                                    className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 py-2 w-full text-left"
+                                    className="hover:text-black transition-colors flex items-center gap-2 py-2 w-full text-left"
                                 >
                                     <LogOut className="w-4 h-4" />
                                     <span>Cerrar Sesión</span>

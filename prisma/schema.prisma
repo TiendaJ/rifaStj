@@ -73,6 +73,7 @@ model Producto {
   descripcion  String
   precio       Float
   cantidad     Int
+  marca        String?
   fotos        String[]
   videos       String[]
   created_at   DateTime  @default(now())
