@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { getSession } from "@/lib/auth";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import "./globals.css";
 
-// Inter font for body text (high‑performance sans‑serif)
-const inter = Inter({
+// Montserrat font as requested (Regular 400, SemiBold 600, ExtraBold 800)
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "600", "800"],
+  variable: "--font-montserrat",
 });
 
 
@@ -29,7 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} antialiased font-sans bg-white text-black bg-grid-pattern min-h-screen flex flex-col`}
+        className={`${montserrat.variable} antialiased font-sans bg-white text-black bg-grid-pattern min-h-screen flex flex-col`}
       >
         {/* Header – Ultra-minimal, sticky, backdrop blur */}
         <Navbar session={session} />
