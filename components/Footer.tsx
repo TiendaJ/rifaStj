@@ -50,7 +50,7 @@ export function Footer() {
                 <div className="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
                     <p>© {currentYear} Jshop. Todos los derechos reservados.</p>
                     <p className="flex items-center gap-1">
-                        Desarrollado por <a href="https://paginasweb.pe" target="_blank" className="text-white hover:underline font-bold">PaginasWeb.pe</a>
+                        Desarrollado por <a href="#" className="text-white hover:underline font-bold">ExactaTi</a>
                     </p>
                 </div>
             </div>

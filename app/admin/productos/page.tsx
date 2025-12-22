@@ -10,7 +10,7 @@ export default async function ProductosPage({ searchParams }: { searchParams: Pr
     const limit = 10;
 
     const [productosData, categorias] = await Promise.all([
-        getProductos(q, category, page, limit),
+        getProductos(q, category, undefined, undefined, undefined, page, limit),
         getCategorias()
     ]);
 
