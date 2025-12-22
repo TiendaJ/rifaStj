@@ -260,9 +260,9 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
                                 <Link
                                     href={`/productos/${product.id}`}
                                     key={product.id}
-                                    className="group flex flex-col"
+                                    className="group flex flex-col text-left"
                                 >
-                                    <div className="relative aspect-[4/5] bg-[#F5F5F5] overflow-hidden mb-4">
+                                    <div className="aspect-[4/5] bg-[#F5F5F5] overflow-hidden mb-4 relative">
                                         {product.fotos && product.fotos.length > 0 ? (
                                             <img
                                                 src={product.fotos[0]}
@@ -275,15 +275,19 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
                                             </div>
                                         )}
                                         {product.cantidad <= 0 && (
-                                            <div className="absolute top-2 right-2 bg-black text-white text-[10px] font-black px-2 py-1 uppercase">Agotado</div>
+                                            <div className="absolute top-2 right-2 bg-black text-white text-[12px] font-bold px-2 py-1 uppercase tracking-wider">Agotado</div>
                                         )}
-                                        {/* Badge example */}
-                                        {/* <div className="absolute top-2 left-2 bg-[#FF4D00] text-white text-[10px] font-black px-2 py-1 uppercase">Nuevo</div> */}
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-base uppercase leading-tight mb-1 group-hover:text-gray-600 transition-colors">{product.nombre}</h3>
-                                        <p className="text-gray-500 text-xs mb-2">{product.categoria?.descripcion}</p>
-                                        <span className="text-lg font-black block">S/ {product.precio.toFixed(2)}</span>
+                                        <h3 className="font-semibold text-[16px] uppercase leading-tight mb-1 text-black group-hover:underline decoration-1">
+                                            {product.nombre}
+                                        </h3>
+                                        <p className="text-[#6E6E6E] text-[14px] mb-2 font-normal">
+                                            {product.categoria?.descripcion || 'Rendimiento confiable'}
+                                        </p>
+                                        <span className="text-[16px] font-semibold text-black">
+                                            S/ {product.precio.toFixed(2)}
+                                        </span>
                                     </div>
                                 </Link>
                             ))}
