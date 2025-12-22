@@ -20,14 +20,31 @@ export default async function HomePage() {
   return (
     <div className="space-y-12 md:space-y-16 px-4 md:px-0">
       {/* Hero section - Centered, high contrast, minimal */}
-      <section className="max-w-4xl mx-auto text-center pt-4 md:pt-6">
-        <h1 className="text-3xl md:text-5xl font-extrabold mb-2 md:mb-4 tracking-tighter text-black">
-          Rifas
+      <section className="max-w-4xl mx-auto text-center pt-8 md:pt-12 mb-12">
+        <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight text-gray-900 leading-tight">
+          Venta y reparación de celulares en Tarapoto. <br className="hidden md:block" />
+          <span className="text-indigo-600">Compra seguro, rápido y con garantía.</span>
         </h1>
-        <p className="text-base md:text-lg text-gray-500 mb-4 md:mb-6 max-w-2xl mx-auto leading-relaxed">
-          Las rifas tienen cupos limitados según el valor del premio. Participas realizando el pago. Recibirás por WhatsApp el enlace de la transmisión.
+        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+          Celulares, accesorios y servicio técnico especializado. Pagos fáciles y entrega inmediata.
         </p>
 
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Link
+            href="/productos"
+            className="w-full sm:w-auto px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full transition-colors duration-200 text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Comprar ahora
+          </Link>
+          <a
+            href="https://wa.me/51951381439?text=Hola,%20estoy%20interesado%20en%20equipos%20y%20servicios%20de%20Jshop."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-full transition-colors duration-200 text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Hablar por WhatsApp
+          </a>
+        </div>
       </section>
 
       {/* Grid of active rifas */}
