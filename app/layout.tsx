@@ -34,8 +34,8 @@ export default async function RootLayout({
         {/* Header – Ultra-minimal, sticky, backdrop blur */}
         <Navbar session={session} />
 
-        {/* Main Content - Centered, spacious */}
-        <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Main Content - Full width, pages control their own spacing */}
+        <main className="flex-1 w-full">
           {children}
         </main>
         <Footer />
