@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ProductActions from './ProductActions';
 import ProductMediaGallery from './ProductMediaGallery';
 import { TrustBadges } from '@/components/TrustBadges';
+import { ProductReviews } from '@/components/ProductReviews';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,6 +85,11 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                             <TrustBadges />
                         </div>
                     </div>
+                </div>
+
+                {/* Product Reviews */}
+                <div className="mt-12 md:mt-16">
+                    <ProductReviews />
                 </div>
 
                 {/* Related Products Section */}
