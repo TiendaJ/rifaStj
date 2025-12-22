@@ -43,36 +43,38 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full text-center md:text-left flex flex-col justify-center h-full">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter uppercase italic leading-[0.9]">
-            Tecnología <br /> que rinde.
-          </h1>
-          <p className="text-lg md:text-2xl text-gray-200 mb-10 max-w-xl leading-relaxed font-medium">
-            Venta y reparación de celulares con garantía real.<br />
-            Diseñado para quienes exigen rendimiento, no excusas.
-          </p>
+        <div className="relative z-10 w-full px-6 md:px-12 lg:px-20 flex flex-col justify-center h-full">
+          <div className="max-w-4xl">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter uppercase italic leading-[0.9]">
+              Tecnología <br /> que rinde.
+            </h1>
+            <p className="text-lg md:text-2xl text-gray-200 mb-10 max-w-xl leading-relaxed font-medium">
+              Venta y reparación de celulares con garantía real.<br />
+              Diseñado para quienes exigen rendimiento, no excusas.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
-            <Link
-              href="/productos"
-              className="w-full sm:w-auto px-10 py-4 bg-[#FF4D00] hover:bg-orange-600 text-white font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all duration-300 hover:skew-x-0"
-            >
-              <span className="skew-x-[10deg] inline-block">Comprar Ahora</span>
-            </Link>
-            <a
-              href="https://wa.me/51951381439"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-10 py-4 bg-white/10 border-2 border-white hover:bg-white text-white hover:text-black font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all duration-300 hover:skew-x-0"
-            >
-              <span className="skew-x-[10deg] inline-block">Cotizar Reparación</span>
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-start items-center">
+              <Link
+                href="/productos"
+                className="w-full sm:w-auto px-10 py-4 bg-[#FF4D00] hover:bg-orange-600 text-white font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all duration-300 hover:skew-x-0"
+              >
+                <span className="skew-x-[10deg] inline-block">Comprar Ahora</span>
+              </Link>
+              <a
+                href="https://wa.me/51951381439"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-10 py-4 bg-white/10 border-2 border-white hover:bg-white text-white hover:text-black font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all duration-300 hover:skew-x-0"
+              >
+                <span className="skew-x-[10deg] inline-block">Cotizar Reparación</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* SUBHERO / TRUST */}
-      <section className="max-w-7xl mx-auto px-6 mb-24 w-full">
+      <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
         <div className="border-l-4 border-[#FF4D00] pl-6 py-2">
           <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-4">Rápido. Confiable. Profesional.</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-lg font-bold text-[#6B6B6B]">
@@ -91,7 +93,7 @@ export default async function HomePage() {
       </section>
 
       {/* PRODUCTS SECTION */}
-      <section className="max-w-7xl mx-auto px-6 mb-24 w-full">
+      <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b-2 border-gray-100 pb-6">
           <div>
             <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-4">Lo esencial. <br /> Bien hecho.</h2>
@@ -106,7 +108,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {productos.map((producto) => (
             <Link
               href={`/productos/${producto.id}`}
@@ -141,7 +143,7 @@ export default async function HomePage() {
 
       {/* CATEGORIES */}
       <section className="bg-black text-white py-20 mb-24">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full px-6 md:px-12 lg:px-20">
           <h2 className="text-center text-[#6B6B6B] font-bold uppercase tracking-widest mb-12">Todo lo que necesitas. Nada que sobre.</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <Link href="/productos?q=celulares" className="group">
@@ -165,7 +167,7 @@ export default async function HomePage() {
       </section>
 
       {/* SERVICE SECTION */}
-      <section className="max-w-7xl mx-auto px-6 mb-24 w-full">
+      <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="order-2 md:order-1 relative h-[500px] w-full bg-[#F5F5F5]">
             <img
@@ -191,10 +193,10 @@ export default async function HomePage() {
       </section>
 
       {/* BENEFITS (Gymshark style) */}
-      <section className="bg-[#F5F5F5] py-20 mb-24">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="bg-[#F5F5F5] py-20 mb-24 w-full">
+        <div className="px-6 md:px-12 lg:px-20 text-center">
           <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-12">Diseñado para rendir</h2>
-          <div className="grid grid-cols-2 gap-y-8 gap-x-4 md:gap-x-12 mb-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-4 md:gap-x-12 mb-12">
             <div className="flex flex-col items-center">
               <span className="text-3xl mb-2 font-black text-[#FF4D00]">01</span>
               <h3 className="font-bold text-xl uppercase">Reparaciones rápidas</h3>
@@ -217,7 +219,7 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="max-w-5xl mx-auto px-6 mb-24 w-full">
+      <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-white border-2 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <p className="text-2xl font-bold italic mb-6">“Rápidos, claros y confiables. Volvería a comprar.”</p>
@@ -232,7 +234,7 @@ export default async function HomePage() {
 
       {/* FINAL CTA */}
       <section className="relative w-full py-24 bg-black text-white text-center overflow-hidden">
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
+        <div className="relative z-10 w-full px-6 md:px-12 lg:px-20">
           <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter mb-8 leading-[0.9]">Tecnología Real.<br /> Atención Humana.</h2>
           <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto">
             Estamos en Tarapoto. <br /> Compra con confianza. Soporte directo cuando lo necesitas.
