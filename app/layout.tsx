@@ -15,8 +15,34 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Jshop - Participa y Gana",
-  description: "Plataforma de rifas online. Participa por premios increíbles con cupos limitados.",
+  title: {
+    default: "Jshop | Tecnología y Accesorios en Tarapoto",
+    template: "%s | Jshop",
+  },
+  description: "Tienda de tecnología en Tarapoto. Venta de celulares, accesorios premium y servicio técnico especializado con garantía. Envíos a todo el Perú.",
+  keywords: ["celulares", "iphone", "samsung", "xiaomi", "accesorios", "cargadores", "audífonos", "servicio técnico", "tarapoto", "san martin"],
+  openGraph: {
+    type: "website",
+    locale: "es_PE",
+    url: "https://jshop.pe", // Assuming domain or placeholder
+    siteName: "Jshop Tecnología",
+    title: "Jshop | Tecnología y Accesorios en Tarapoto",
+    description: "Encuentra los mejores celulares y accesorios con garantía en Tarapoto.",
+    images: [
+      {
+        url: "/og-image.jpg", // We might not have this yet but it's good practice
+        width: 1200,
+        height: 630,
+        alt: "Jshop Tecnología",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jshop | Tecnología y Accesorios",
+    description: "Celulares y servicio técnico garantizado en Tarapoto.",
+    images: ["/og-image.jpg"],
+  },
 };
 
 export default async function RootLayout({

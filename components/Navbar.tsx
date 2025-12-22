@@ -40,6 +40,9 @@ export function Navbar({ session }: NavbarProps) {
                     <Link href="/productos" className="hover:text-black transition-colors">
                         Ver Tienda
                     </Link>
+                    <Link href="/rifas" className="bg-black text-white px-3 py-1.5 rounded-sm hover:bg-gray-800 transition-colors">
+                        Rifas
+                    </Link>
                     {!session ? (
                         <Link href="/login" className="hover:text-black transition-colors flex items-center gap-2 ml-4">
                             <LogIn className="w-4 h-4" />
@@ -111,6 +114,13 @@ export function Navbar({ session }: NavbarProps) {
                             onClick={() => setIsOpen(false)}
                         >
                             Ver Tienda
+                        </Link>
+                        <Link
+                            href="/rifas"
+                            className="text-black font-black hover:text-gray-700 transition-colors py-2 border-l-4 border-black pl-2 bg-gray-50"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            Rifas
                         </Link>
                         {!session ? (
                             <Link
