@@ -92,17 +92,12 @@ export async function getProductos(
 
 export async function getMarcas() {
     try {
-        // Group by marca to get distinct values
-        const marcas = await prisma.producto.groupBy({
-            by: ['marca'],
-            where: {
-                marca: { not: null }
-            }
-        });
-        // Filter out nulls and empty strings just in case
-        return marcas.map(m => m.marca).filter(Boolean) as string[];
+        // Use queryRaw to bypass client validation as the client might be outdated 
+        // This resolves the runtime error when the Prisma Client hasn't been reloaded
+        const result = await prisma.$queryRaw`SELECT DISTINCT marca FROM "Producto" WHERE marca IS NOT NULL` as any[];
+        return result.map((r: any) => r.marca).filter(Boolean) as string[];
     } catch (error) {
-        console.error('Error fetching marcas:', error);
+        console.warn('Error fetching marcas (raw):', error);
         return [];
     }
 }
