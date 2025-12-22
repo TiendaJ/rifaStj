@@ -6,6 +6,7 @@ import ProductActions from './ProductActions';
 import ProductMediaGallery from './ProductMediaGallery';
 import { TrustBadges } from '@/components/TrustBadges';
 import { ProductReviews } from '@/components/ProductReviews';
+import { ShippingAccordion } from '@/components/ShippingAccordion';
 
 export const dynamic = 'force-dynamic';
 
@@ -77,12 +78,14 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                                 <ProductActions whatsappLink={whatsappLink} cantidad={producto.cantidad} />
                                 <div className="hidden md:block">
                                     <TrustBadges />
+                                    <ShippingAccordion />
                                 </div>
                             </div>
                         </div>
-                        {/* Mobile Trust Badges (Visible out of sticky area) */}
+                        {/* Mobile Trust Badges & Shipping (Visible out of sticky area) */}
                         <div className="md:hidden px-5 pb-8">
                             <TrustBadges />
+                            <ShippingAccordion />
                         </div>
                     </div>
                 </div>

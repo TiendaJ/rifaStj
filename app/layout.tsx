@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { AnnouncementBar } from "@/components/AnnouncementBar"; // Import added correctly
 import "./globals.css";
 
 // Montserrat font as requested (Regular 400, SemiBold 600, ExtraBold 800)
@@ -12,9 +13,6 @@ const montserrat = Montserrat({
   weight: ["400", "600", "800"],
   variable: "--font-montserrat",
 });
-
-
-
 
 export const metadata: Metadata = {
   title: "Jshop - Participa y Gana",
@@ -32,6 +30,7 @@ export default async function RootLayout({
       <body
         className={`${montserrat.variable} antialiased font-sans bg-white text-black bg-grid-pattern min-h-screen flex flex-col`}
       >
+        <AnnouncementBar />
         {/* Header – Ultra-minimal, sticky, backdrop blur */}
         <Navbar session={session} />
 
