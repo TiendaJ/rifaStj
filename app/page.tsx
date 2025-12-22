@@ -45,12 +45,12 @@ export default async function HomePage() {
 
         <div className="relative z-10 w-full px-6 md:px-12 lg:px-20 flex flex-col justify-center h-full">
           <div className="max-w-4xl">
+            <p className="text-[#FF4D00] font-bold uppercase tracking-widest mb-4">¿Qué estás buscando hoy?</p>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter uppercase italic leading-[0.9]">
               Tecnología <br /> que rinde.
             </h1>
             <p className="text-base md:text-lg text-gray-200 mb-8 max-w-xl leading-relaxed font-medium">
-              Venta y reparación de celulares con garantía real.<br />
-              Diseñado para quienes exigen rendimiento, no excusas.
+              Celulares y accesorios con calidad garantizada en Tarapoto.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-start items-center">
@@ -73,37 +73,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SUBHERO / TRUST */}
-      <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
-        <div className="border-l-4 border-[#FF4D00] pl-6 py-2">
-          <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">Rápido. Confiable. Profesional.</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-base font-bold text-[#6B6B6B]">
-            <div className="flex items-center gap-2">
-              <span className="text-[#FF4D00]">✔</span> Garantía por escrito
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[#FF4D00]">✔</span> Atención local en Tarapoto
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[#FF4D00]">✔</span> Pagos seguros: Yape, Plin y tarjetas
-            </div>
-          </div>
-          <p className="mt-4 text-lg font-black italic text-black">Tecnología sin sorpresas.</p>
-        </div>
-      </section>
-
-      {/* PRODUCTS SECTION */}
+      {/* PRODUCTS SECTION (Updated Copy) */}
       <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b-2 border-gray-100 pb-6">
           <div>
-            <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-4">Lo esencial. <br /> Bien hecho.</h2>
+            <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-4">Nuestros más vendidos</h2>
             <p className="text-base text-[#6B6B6B] max-w-lg">
-              Celulares y accesorios seleccionados por calidad, durabilidad y precio justo. Compra inteligente. Uso diario sin problemas.
+              Encuentra los celulares y accesorios que más se eligen cada día. Diseñados para acompañar tu ritmo, sin sorpresas.
             </p>
           </div>
           <div className="mt-6 md:mt-0">
             <Link href="/productos" className="inline-block border-b-2 border-black pb-1 text-lg font-black uppercase hover:text-[#FF4D00] hover:border-[#FF4D00] transition-colors">
-              Ver Tienda &rarr;
+              Ver todos los productos &rarr;
             </Link>
           </div>
         </div>
@@ -133,7 +114,7 @@ export default async function HomePage() {
               </div>
               <div>
                 <h3 className="font-bold text-lg uppercase leading-tight mb-1 group-hover:text-[#FF4D00] transition-colors">{producto.nombre}</h3>
-                <p className="text-[#6B6B6B] text-sm mb-2">Rendimiento confiable.</p>
+                <p className="text-[#6B6B6B] text-sm mb-2">Rendimiento confiable para tu día a día.</p>
                 <span className="text-xl font-black">S/ {producto.precio.toFixed(2)}</span>
               </div>
             </Link>
@@ -144,7 +125,11 @@ export default async function HomePage() {
       {/* CATEGORIES */}
       <section className="bg-black text-white py-20 mb-24">
         <div className="w-full px-6 md:px-12 lg:px-20">
-          <h2 className="text-center text-[#6B6B6B] font-bold uppercase tracking-widest mb-12">Todo lo que necesitas. Nada que sobre.</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-[#6B6B6B] font-bold uppercase tracking-widest mb-4">Categorías Clave</h2>
+            <p className="text-xl md:text-2xl font-black italic">Encuentra lo que necesitas con claridad.<br />Nada de confundir al cliente.</p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <Link href="/productos?q=celulares" className="group">
               <div className="text-3xl md:text-4xl font-black uppercase italic group-hover:text-[#FF4D00] transition-colors mb-2">Celulares</div>
@@ -155,7 +140,7 @@ export default async function HomePage() {
               <div className="h-1 w-0 bg-[#FF4D00] mx-auto group-hover:w-full transition-all duration-300"></div>
             </Link>
             <a href="https://wa.me/51951381439" target="_blank" className="group">
-              <div className="text-3xl md:text-4xl font-black uppercase italic group-hover:text-[#FF4D00] transition-colors mb-2">Reparación</div>
+              <div className="text-3xl md:text-4xl font-black uppercase italic group-hover:text-[#FF4D00] transition-colors mb-2">Servicio Técnico</div>
               <div className="h-1 w-0 bg-[#FF4D00] mx-auto group-hover:w-full transition-all duration-300"></div>
             </a>
             <Link href="/productos" className="group">
@@ -177,9 +162,9 @@ export default async function HomePage() {
             />
           </div>
           <div className="order-1 md:order-2">
-            <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-6 leading-[0.9]">Precisión,<br /> No Promesas.</h2>
+            <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-6 leading-[0.9]">Precisión técnica,<br /> Resultados reales.</h2>
             <p className="text-base md:text-lg text-[#6B6B6B] mb-8 font-medium">
-              Reparación profesional con diagnóstico claro y resultados reales. Repuestos de calidad. Garantía incluida.
+              Reparamos tu celular con diagnóstico claro, repuestos de calidad y garantía por escrito.
             </p>
             <a
               href="https://wa.me/51951381439"
@@ -192,29 +177,25 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* BENEFITS (Gymshark style) */}
-      <section className="bg-[#F5F5F5] py-20 mb-24 w-full">
-        <div className="px-6 md:px-12 lg:px-20 text-center">
-          <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-12">Diseñado para rendir</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-4 md:gap-x-12 mb-12">
-            <div className="flex flex-col items-center">
-              <span className="text-3xl mb-2 font-black text-[#FF4D00]">01</span>
-              <h3 className="font-bold text-xl uppercase">Reparaciones rápidas</h3>
+      {/* WHY CHOOSE US (Trust) */}
+      <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
+        <div className="border-l-4 border-[#FF4D00] pl-6 py-2">
+          <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4">Rápido. Confiable. Profesional.</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-base font-bold text-[#6B6B6B] mb-6">
+            <div className="flex items-center gap-2">
+              <span className="text-[#FF4D00]">✔</span> Atención local en Tarapoto
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl mb-2 font-black text-[#FF4D00]">02</span>
-              <h3 className="font-bold text-xl uppercase">Productos con garantía</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-[#FF4D00]">✔</span> Pagos seguros: Yape, Plin, tarjetas
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl mb-2 font-black text-[#FF4D00]">03</span>
-              <h3 className="font-bold text-xl uppercase">Atención directa</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-[#FF4D00]">✔</span> Entrega eficiente
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl mb-2 font-black text-[#FF4D00]">04</span>
-              <h3 className="font-bold text-xl uppercase">Entrega eficiente</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-[#FF4D00]">✔</span> Garantía real en productos y reparaciones
             </div>
           </div>
-          <p className="text-xl font-black italic">Tecnología que acompaña tu ritmo.</p>
+          <p className="text-lg font-black italic text-black">Tecnología sin sorpresas. Solo resultados.</p>
         </div>
       </section>
 
@@ -222,38 +203,40 @@ export default async function HomePage() {
       <section className="w-full px-6 md:px-12 lg:px-20 mb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-white border-2 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-lg md:text-xl font-bold italic mb-6">“Rápidos, claros y confiables. Volvería a comprar.”</p>
-            <p className="text-[#6B6B6B] font-bold uppercase">— Cliente Jshop</p>
+            <p className="text-lg md:text-xl font-bold italic mb-6">“Fueron claros, rápidos y profesionales. 100% recomendados.”</p>
+            <p className="text-[#6B6B6B] font-bold uppercase">— Cliente satisfecho</p>
           </div>
           <div className="bg-white border-2 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-lg md:text-xl font-bold italic mb-6">“Repararon mi celular el mismo día. Excelente servicio.”</p>
+            <p className="text-lg md:text-xl font-bold italic mb-6">“Compré mi celular y llegó el mismo día con garantía.”</p>
             <p className="text-[#6B6B6B] font-bold uppercase">— Cliente Jshop</p>
           </div>
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* FINAL CTA (Location/Contact) */}
       <section className="relative w-full py-24 bg-black text-white text-center overflow-hidden">
         <div className="relative z-10 w-full px-6 md:px-12 lg:px-20">
-          <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-8 leading-[0.9]">Tecnología Real.<br /> Atención Humana.</h2>
+          <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-8 leading-[0.9]">Atención directa en Tarapoto.</h2>
           <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
-            Estamos en Tarapoto. <br /> Compra con confianza. Soporte directo cuando lo necesitas.
+            Soporte por WhatsApp.<br />
+            Sitio físico y atención humana cuando lo necesitas.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link
-              href="/productos"
-              className="w-full sm:w-auto px-12 py-5 bg-[#FF4D00] hover:bg-orange-600 text-white font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all"
-            >
-              <span className="skew-x-[10deg] inline-block">Comprar Ahora</span>
-            </Link>
             <a
               href="https://wa.me/51951381439"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-12 py-5 bg-transparent border-2 border-white hover:bg-white text-white hover:text-black font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all"
+              className="w-full sm:w-auto px-12 py-5 bg-[#FF4D00] hover:bg-orange-600 text-white font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all"
             >
               <span className="skew-x-[10deg] inline-block">Hablar por WhatsApp</span>
             </a>
+            <Link
+              href="https://maps.google.com/?q=Tarapoto" /* Placeholder, should ideally be real link or contact page */
+              target="_blank"
+              className="w-full sm:w-auto px-12 py-5 bg-transparent border-2 border-white hover:bg-white text-white hover:text-black font-black uppercase tracking-wider rounded-none skew-x-[-10deg] transition-all"
+            >
+              <span className="skew-x-[10deg] inline-block">Visítanos</span>
+            </Link>
           </div>
         </div>
       </section>
