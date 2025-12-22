@@ -1,31 +1,31 @@
 'use client';
 
-import { useState } from 'react';
-import { ShoppingBag, Play, Image as ImageIcon } from 'lucide-react';
+import { useState, useRef, MouseEvent } from 'react';
+import { Play, ShoppingBag } from 'lucide-react';
 
 interface ProductMediaGalleryProps {
     nombre: string;
     fotos: string[];
-    videos?: string[]; // Make it optional in case it’s missing initially
+    videos?: string[];
     isSoldOut: boolean;
 }
 
 export default function ProductMediaGallery({ nombre, fotos, videos = [], isSoldOut }: ProductMediaGalleryProps) {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [zoomStyle, setZoomStyle] = useState<React.CSSProperties>({});
+    const imageContainerRef = useRef<HTMLDivElement>(null);
+
     const allMedia = [
         ...videos.map(src => ({ type: 'video' as const, src })),
         ...fotos.map(src => ({ type: 'image' as const, src }))
     ];
 
-    const [activeIndex, setActiveIndex] = useState(0);
-
     if (allMedia.length === 0) {
         return (
-            <div className="bg-gray-100 aspect-square relative flex items-center justify-center text-gray-400">
+            <div className="bg-[#F5F5F5] aspect-[4/5] relative flex items-center justify-center text-gray-300">
                 <ShoppingBag size={64} opacity={0.2} />
                 {isSoldOut && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <span className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">Agotado</span>
-                    </div>
+                    <div className="absolute top-4 right-4 bg-black text-white px-3 py-1 text-xs font-black uppercase tracking-wider">Agotado</div>
                 )}
             </div>
         );
@@ -33,15 +33,41 @@ export default function ProductMediaGallery({ nombre, fotos, videos = [], isSold
 
     const activeMedia = allMedia[activeIndex];
 
+    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+        if (activeMedia.type !== 'image') return;
+
+        const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - left) / width) * 100;
+        const y = ((e.clientY - top) / height) * 100;
+
+        setZoomStyle({
+            transformOrigin: `${x}% ${y}%`,
+            transform: 'scale(2.5)' // Increased zoom level
+        });
+    };
+
+    const handleMouseLeave = () => {
+        setZoomStyle({
+            transformOrigin: 'center center',
+            transform: 'scale(1)'
+        });
+    };
+
     return (
-        <div className="flex flex-col h-full">
-            {/* Main Media Viewer */}
-            <div className="bg-gray-100 aspect-square relative overflow-hidden group">
+        <div className="flex flex-col h-full gap-4 sticky top-24">
+            {/* Main Viewer */}
+            <div
+                className="bg-[#F5F5F5] aspect-[4/5] relative overflow-hidden cursor-crosshair group"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                ref={imageContainerRef}
+            >
                 {activeMedia.type === 'image' ? (
                     <img
                         src={activeMedia.src}
                         alt={nombre}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-100 ease-out mix-blend-multiply"
+                        style={zoomStyle}
                     />
                 ) : (
                     <video
@@ -52,28 +78,28 @@ export default function ProductMediaGallery({ nombre, fotos, videos = [], isSold
                 )}
 
                 {isSoldOut && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center pointer-events-none">
-                        <span className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">Agotado</span>
-                    </div>
+                    <div className="absolute top-4 right-4 bg-black text-white px-3 py-1 text-xs font-black uppercase tracking-wider z-20">Agotado</div>
                 )}
             </div>
 
-            {/* Thumbnails */}
+            {/* Thumbnails Grid */}
             {allMedia.length > 1 && (
-                <div className="flex gap-2 p-4 overflow-x-auto">
+                <div className="grid grid-cols-5 gap-3">
                     {allMedia.map((media, idx) => (
                         <button
                             key={idx}
-                            onClick={() => setActiveIndex(idx)}
-                            className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${activeIndex === idx ? 'border-black ring-1 ring-black' : 'border-transparent hover:border-gray-300'
+                            onClick={() => {
+                                setActiveIndex(idx);
+                                handleMouseLeave(); // Reset zoom on switch
+                            }}
+                            className={`aspect-square bg-[#F5F5F5] overflow-hidden border-2 transition-all ${activeIndex === idx ? 'border-black opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
                                 }`}
                         >
                             {media.type === 'image' ? (
-                                <img src={media.src} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                                <img src={media.src} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover mix-blend-multiply" />
                             ) : (
-                                <div className="w-full h-full bg-gray-900 flex items-center justify-center text-white">
-                                    <video src={media.src} className="w-full h-full object-cover opacity-50 absolute inset-0" />
-                                    <Play size={24} className="relative z-10" />
+                                <div className="w-full h-full bg-black flex items-center justify-center text-white relative">
+                                    <Play size={16} className="relative z-10" />
                                 </div>
                             )}
                         </button>

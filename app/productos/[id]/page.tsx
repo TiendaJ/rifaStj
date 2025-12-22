@@ -4,6 +4,7 @@ import { ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import ProductActions from './ProductActions';
 import ProductMediaGallery from './ProductMediaGallery';
+import { TrustBadges } from '@/components/TrustBadges';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,7 +74,14 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
                             <div className="mt-auto pt-0 md:pt-8 md:border-t border-gray-100">
                                 <ProductActions whatsappLink={whatsappLink} cantidad={producto.cantidad} />
+                                <div className="hidden md:block">
+                                    <TrustBadges />
+                                </div>
                             </div>
+                        </div>
+                        {/* Mobile Trust Badges (Visible out of sticky area) */}
+                        <div className="md:hidden px-5 pb-8">
+                            <TrustBadges />
                         </div>
                     </div>
                 </div>
