@@ -13,10 +13,15 @@ export default function GoogleAuthButton({ text = 'Continuar con Google' }: { te
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
 
+        const next = new URLSearchParams(window.location.search).get('next');
+        if (next) {
+            localStorage.setItem('auth_next', next);
+        }
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/auth/callback`,
+                redirectTo: `${window.location.origin}/auth/callback${next ? `?next=${encodeURIComponent(next)}` : ''}`,
                 queryParams: {
                     access_type: 'offline',
                     prompt: 'consent',

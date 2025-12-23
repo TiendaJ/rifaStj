@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, ShoppingBag, ChevronLeft, ChevronRight, Filter, X } from 'lucide-react';
+import { Search, ShoppingBag, ChevronLeft, ChevronRight, Filter, X, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useCart } from '@/app/context/CartContext';
 
 interface Categoria {
     id: string;
@@ -40,6 +41,7 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
+    const { addToCart } = useCart();
 
     const [showFilters, setShowFilters] = useState(false);
 
@@ -257,39 +259,63 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
                         {/* Product Grid */}
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
                             {productos.map(product => (
-                                <Link
-                                    href={`/productos/${product.id}`}
-                                    key={product.id}
-                                    className="group flex flex-col text-left"
-                                >
-                                    <div className="aspect-[4/5] bg-[#F5F5F5] overflow-hidden mb-4 relative">
-                                        {product.fotos && product.fotos.length > 0 ? (
-                                            <img
-                                                src={product.fotos[0]}
-                                                alt={product.nombre}
-                                                className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-gray-300">
-                                                <ShoppingBag size={48} />
-                                            </div>
-                                        )}
+                                <div key={product.id} className="group flex flex-col text-left relative">
+                                    <div className="aspect-[4/5] bg-[#F5F5F5] overflow-hidden mb-4 relative rounded-sm">
+                                        <Link href={`/productos/${product.id}`} className="block w-full h-full">
+                                            {product.fotos && product.fotos.length > 0 ? (
+                                                <img
+                                                    src={product.fotos[0]}
+                                                    alt={product.nombre}
+                                                    className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                                    <ShoppingBag size={48} />
+                                                </div>
+                                            )}
+                                        </Link>
+
                                         {product.cantidad <= 0 && (
-                                            <div className="absolute top-2 right-2 bg-black text-white text-[12px] font-bold px-2 py-1 uppercase tracking-wider">Agotado</div>
+                                            <div className="absolute top-2 right-2 bg-black text-white text-[12px] font-bold px-2 py-1 uppercase tracking-wider z-10">Agotado</div>
                                         )}
+
+                                        {/* Action Buttons */}
+                                        <div className="absolute bottom-3 right-3 flex flex-col gap-2 translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
+                                            <button
+                                                onClick={(e) => { e.preventDefault(); /* Wishlist logic */ }}
+                                                className="bg-white text-black p-2.5 rounded-full shadow-md hover:bg-black hover:text-white transition-colors flex items-center justify-center"
+                                                title="Añadir a favoritos"
+                                            >
+                                                <Heart size={18} />
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    addToCart(product);
+                                                }}
+                                                disabled={product.cantidad <= 0}
+                                                className="bg-white text-black p-2.5 rounded-full shadow-md hover:bg-black hover:text-white transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                                                title="Añadir al carrito"
+                                            >
+                                                <ShoppingBag size={18} />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="font-semibold text-[16px] uppercase leading-tight mb-1 text-black group-hover:underline decoration-1">
-                                            {product.nombre}
-                                        </h3>
-                                        <p className="text-[#6E6E6E] text-[14px] mb-2 font-normal">
-                                            {product.categoria?.descripcion || 'Rendimiento confiable'}
-                                        </p>
-                                        <span className="text-[16px] font-semibold text-black">
-                                            S/ {product.precio.toFixed(2)}
-                                        </span>
-                                    </div>
-                                </Link>
+
+                                    <Link href={`/productos/${product.id}`}>
+                                        <div>
+                                            <h3 className="font-semibold text-[16px] uppercase leading-tight mb-1 text-black group-hover:underline decoration-1">
+                                                {product.nombre}
+                                            </h3>
+                                            <p className="text-[#6E6E6E] text-[14px] mb-2 font-normal">
+                                                {product.categoria?.descripcion || 'Rendimiento confiable'}
+                                            </p>
+                                            <span className="text-[16px] font-semibold text-black">
+                                                S/ {product.precio.toFixed(2)}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </div>
                             ))}
                         </div>
 

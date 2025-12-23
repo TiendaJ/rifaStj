@@ -30,6 +30,7 @@ export default function LoginPage() {
             </div>
 
             <form action={action} className="space-y-6">
+                <input type="hidden" name="next" value={new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('next') || ''} />
                 <div>
                     <label htmlFor="identifier" className="block text-xs font-bold text-black uppercase tracking-wide mb-2">
                         DNI o Celular

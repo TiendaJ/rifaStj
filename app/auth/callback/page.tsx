@@ -35,7 +35,7 @@ function AuthCallbackContent() {
                     if (result.success) {
                         const storedNext = localStorage.getItem('auth_next');
                         if (storedNext) localStorage.removeItem('auth_next');
-                        window.location.href = next || storedNext || '/mis-inscripciones';
+                        window.location.href = next || storedNext || '/mi-dashboard';
                     } else {
                         setError('Error al iniciar sesión en el servidor.');
                     }
@@ -57,7 +57,7 @@ function AuthCallbackContent() {
                             if (result.success) {
                                 const storedNext = localStorage.getItem('auth_next');
                                 if (storedNext) localStorage.removeItem('auth_next');
-                                window.location.href = next || storedNext || '/mis-inscripciones';
+                                window.location.href = next || storedNext || '/mi-dashboard';
                             }
                         }
                     }

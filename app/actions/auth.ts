@@ -138,10 +138,12 @@ export async function login(prevState: any, formData: FormData) {
     });
 
     // Redirect based on role
+    const next = formData.get('next') as string;
+
     if (sessionData.role === 'admin') {
         redirect('/admin/rifas');
     } else {
-        redirect('/mis-inscripciones');
+        redirect(next || '/mi-dashboard');
     }
 }
 

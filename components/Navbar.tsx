@@ -33,11 +33,17 @@ export function Navbar({ session }: NavbarProps) {
                         <Link href="/" className="hover:text-black transition-colors">
                             Inicio
                         </Link>
+                        <Link href="/productos" className="hover:text-black transition-colors">
+                            Tienda
+                        </Link>
                         <Link href="/productos?q=celular" className="hover:text-black transition-colors">
                             Celulares
                         </Link>
                         <Link href="/productos?q=accesorios" className="hover:text-black transition-colors">
                             Accesorios
+                        </Link>
+                        <Link href="/rifas" className="hover:text-black transition-colors">
+                            Rifas
                         </Link>
                         <Link href="/productos?q=oferta" className="text-red-600 hover:text-red-700 transition-colors">
                             Ofertas
@@ -63,7 +69,7 @@ export function Navbar({ session }: NavbarProps) {
                         ) : (
                             <>
                                 <Link
-                                    href={session.role === 'admin' ? "/admin/rifas" : "/mis-inscripciones"}
+                                    href={session.role === 'admin' ? "/admin/rifas" : "/mi-dashboard"}
                                     className="hover:text-black transition-colors flex items-center gap-2 ml-4"
                                 >
                                     <User className="w-4 h-4" />
@@ -157,7 +163,7 @@ export function Navbar({ session }: NavbarProps) {
                             ) : (
                                 <>
                                     <Link
-                                        href={session.role === 'admin' ? "/admin/rifas" : "/mis-inscripciones"}
+                                        href={session.role === 'admin' ? "/admin/rifas" : "/mi-dashboard"}
                                         className="hover:text-black transition-colors flex items-center gap-2 py-2"
                                         onClick={() => setIsOpen(false)}
                                     >

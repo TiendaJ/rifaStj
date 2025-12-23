@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Protected Client Routes
-    if (path.startsWith('/mis-inscripciones')) {
+    if (path.startsWith('/mi-dashboard')) {
         if (!payload) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
             if (payload.role === 'admin') {
                 return NextResponse.redirect(new URL('/admin/rifas', request.url));
             } else {
-                return NextResponse.redirect(new URL('/mis-inscripciones', request.url));
+                return NextResponse.redirect(new URL('/mi-dashboard', request.url));
             }
         }
     }

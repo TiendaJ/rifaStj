@@ -36,85 +36,135 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-white pb-20">
-            <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-16">
-                <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter mb-8 md:mb-12">
-                    Tu Carrito <span className="text-gray-400">({cartCount})</span>
-                </h1>
+        <div className="min-h-screen bg-white text-gray-900 pb-24 font-sans">
+            {/* Minimal Header for Cart */}
+            <div className="bg-gray-50 border-b border-gray-200 py-12 md:py-20 mb-8 md:mb-12">
+                <div className="max-w-6xl mx-auto px-4 md:px-8 text-center">
+                    <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">Tu Bolsa</h1>
+                    <p className="text-gray-500 font-medium uppercase tracking-widest text-xs md:text-sm">
+                        {cartCount} {cartCount === 1 ? 'Producto' : 'Productos'} seleccionados
+                    </p>
+                </div>
+            </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="max-w-6xl mx-auto px-4 md:px-8">
+                <div className="flex flex-col lg:flex-row gap-12">
                     {/* Items List */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="flex-1 space-y-8">
                         {items.map((item) => (
-                            <div key={item.id} className="flex gap-4 border-b border-gray-100 pb-6 group">
-                                <div className="w-24 h-24 bg-gray-50 flex-shrink-0 overflow-hidden relative">
+                            <div key={item.id} className="flex gap-6 pb-8 border-b border-gray-100 last:border-0 group transition-opacity hover:opacity-90">
+                                <Link href={`/productos/${item.id}`} className="w-32 h-40 bg-gray-100 flex-shrink-0 overflow-hidden relative block">
                                     {item.imagen ? (
-                                        <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" />
+                                        <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                                             <ShoppingBag size={24} />
                                         </div>
                                     )}
-                                </div>
-                                <div className="flex-1 flex flex-col justify-between">
-                                    <div>
-                                        <div className="flex justify-between items-start">
-                                            <h3 className="font-bold text-lg uppercase tracking-tight leading-tight pr-4">
+                                </Link>
+                                <div className="flex-1 flex flex-col">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <Link href={`/productos/${item.id}`} className="block">
+                                            <h3 className="font-bold text-lg md:text-xl uppercase tracking-visible leading-tight text-black hover:text-gray-600 transition-colors">
                                                 {item.nombre}
                                             </h3>
-                                            <button
-                                                onClick={() => removeFromCart(item.id)}
-                                                className="text-gray-400 hover:text-red-500 transition-colors"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
-                                        </div>
-                                        <p className="text-sm font-bold text-gray-900 mt-1">S/ {item.precio.toFixed(2)}</p>
+                                        </Link>
+                                        <button
+                                            onClick={() => removeFromCart(item.id)}
+                                            className="text-gray-400 hover:text-black transition-colors p-1"
+                                            aria-label="Eliminar producto"
+                                        >
+                                            <Trash2 size={20} />
+                                        </button>
                                     </div>
-                                    <div className="flex items-center gap-4 text-sm font-medium text-gray-500">
-                                        <span>Cant: {item.cantidad}</span>
+
+                                    <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-auto">
+                                        Precio Unitario: S/ {item.precio.toFixed(2)}
+                                    </p>
+
+                                    <div className="flex items-end justify-between mt-4">
+                                        <div className="bg-gray-50 border border-gray-200 px-3 py-1 flex items-center gap-4 rounded-sm">
+                                            <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Cant</span>
+                                            <span className="font-bold text-black">{item.cantidad}</span>
+                                        </div>
+                                        <p className="font-bold text-xl text-black">
+                                            S/ {(item.precio * item.cantidad).toFixed(2)}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* Summary */}
-                    <div className="lg:col-span-1">
-                        <div className="bg-gray-50 p-6 md:p-8 sticky top-24">
-                            <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Resumen</h2>
+                    {/* Summary Sidebar */}
+                    <div className="lg:w-[400px] flex-shrink-0">
+                        <div className="bg-white border text-black border-gray-200 p-8 sticky top-24 shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <h2 className="text-xl font-bold uppercase tracking-wider mb-8 flex items-center gap-2">
+                                Resumen del Pedido
+                            </h2>
 
-                            <div className="space-y-3 text-sm mb-6">
-                                <div className="flex justify-between text-gray-600">
+                            <div className="space-y-4 mb-8">
+                                <div className="flex justify-between items-center text-sm font-medium text-gray-600">
                                     <span>Subtotal</span>
-                                    <span className="font-bold text-gray-900">S/ {cartTotal.toFixed(2)}</span>
+                                    <span className="font-bold text-black">S/ {cartTotal.toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
+                                <div className="flex justify-between items-center text-sm font-medium text-gray-600">
                                     <span>Envío</span>
                                     <span className="text-xs uppercase font-bold text-gray-400">Calculado al pagar</span>
                                 </div>
                             </div>
 
-                            <div className="border-t border-gray-200 pt-4 mb-8">
+                            <div className="border-t border-dashed border-gray-300 pt-6 mb-8">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-base font-bold uppercase tracking-wider">Total</span>
-                                    <span className="text-2xl font-black tracking-tight">S/ {cartTotal.toFixed(2)}</span>
+                                    <span className="text-base font-bold uppercase tracking-wider text-black">Total Estimado</span>
+                                    <span className="text-3xl font-black tracking-tighter text-black">S/ {cartTotal.toFixed(2)}</span>
                                 </div>
-                                <p className="text-[10px] text-gray-400 mt-1">Impuestos incluidos si aplica.</p>
+                                <p className="text-[10px] text-gray-400 mt-2 font-medium uppercase tracking-wider">
+                                    Precios incluyen IGV.
+                                </p>
                             </div>
 
-                            <Link
-                                href="/checkout"
-                                className="w-full block text-center bg-black text-white px-6 py-4 rounded-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
-                            >
-                                <span>Proceder al Pago</span>
-                                <ArrowRight size={18} />
-                            </Link>
+                            <div className="space-y-4">
+                                <Link
+                                    href="/checkout"
+                                    className="w-full bg-black text-white px-6 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-gray-900 transition-all flex items-center justify-center gap-3 group"
+                                >
+                                    <span>Checkout Seguro</span>
+                                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                                </Link>
 
-                            <div className="mt-6 text-center">
-                                <Link href="/productos" className="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-black underline decoration-gray-300">
+                                <div className="grid grid-cols-3 gap-2">
+                                    <div className="h-8 bg-gray-100 rounded-sm flex items-center justify-center opacity-50 grayscale hover:grayscale-0 transition-all">
+                                        {/* Visa Placeholder */}
+                                        <div className="w-8 h-4 bg-gray-300 rounded-[2px]"></div>
+                                    </div>
+                                    <div className="h-8 bg-gray-100 rounded-sm flex items-center justify-center opacity-50 grayscale hover:grayscale-0 transition-all">
+                                        {/* MC Placeholder */}
+                                        <div className="w-8 h-4 bg-gray-300 rounded-[2px] relative"><div className="absolute left-0 w-4 h-4 rounded-full bg-gray-400"></div><div className="absolute right-0 w-4 h-4 rounded-full bg-gray-400/80"></div></div>
+                                    </div>
+                                    <div className="h-8 bg-gray-100 rounded-sm flex items-center justify-center opacity-50 grayscale hover:grayscale-0 transition-all">
+                                        {/* Amex Placeholder */}
+                                        <div className="w-8 h-4 bg-gray-300 rounded-[2px] border-2 border-gray-400"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+                                <Link href="/productos" className="inline-block text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors border-b border-transparent hover:border-black pb-0.5">
                                     Continuar comprando
                                 </Link>
+                            </div>
+                        </div>
+
+                        {/* Trust Factors */}
+                        <div className="mt-8 grid grid-cols-2 gap-4">
+                            <div className="text-center p-4">
+                                <h4 className="font-bold text-xs uppercase tracking-widest mb-1">Envío Seguro</h4>
+                                <p className="text-[10px] text-gray-500 leading-tight">Garantizado a todo el Perú</p>
+                            </div>
+                            <div className="text-center p-4">
+                                <h4 className="font-bold text-xs uppercase tracking-widest mb-1">Soporte 24/7</h4>
+                                <p className="text-[10px] text-gray-500 leading-tight">Atención personalizada</p>
                             </div>
                         </div>
                     </div>

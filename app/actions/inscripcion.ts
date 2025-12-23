@@ -102,8 +102,8 @@ export async function inscribirse(prevState: any, formData: FormData) {
         data: inscriptions
     });
 
-    revalidatePath('/mis-inscripciones');
-    redirect('/mis-inscripciones');
+    revalidatePath('/mi-dashboard');
+    redirect('/mi-dashboard');
 }
 
 export async function updateEstadoInscripcion(id: string, formData: FormData) {
