@@ -111,7 +111,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
                             {/* Actions */}
                             <div className="pt-4">
-                                <ProductActions whatsappLink={whatsappLink} cantidad={producto.cantidad} />
+                                <ProductActions whatsappLink={whatsappLink} product={producto} />
                             </div>
 
                             {/* Extra Info */}

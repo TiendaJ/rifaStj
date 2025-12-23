@@ -45,6 +45,10 @@ export const metadata: Metadata = {
   },
 };
 
+import { CartProvider } from "@/app/context/CartContext";
+
+// ... existing imports
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -56,16 +60,18 @@ export default async function RootLayout({
       <body
         className={`${montserrat.variable} antialiased font-sans bg-white text-black bg-grid-pattern min-h-screen flex flex-col`}
       >
-        <AnnouncementBar />
-        {/* Header – Ultra-minimal, sticky, backdrop blur */}
-        <Navbar session={session} />
+        <CartProvider>
+          <AnnouncementBar />
+          {/* Header – Ultra-minimal, sticky, backdrop blur */}
+          <Navbar session={session} />
 
-        {/* Main Content - Full width, pages control their own spacing */}
-        <main className="flex-1 w-full">
-          {children}
-        </main>
-        <Footer />
-        <WhatsAppButton />
+          {/* Main Content - Full width, pages control their own spacing */}
+          <main className="flex-1 w-full">
+            {children}
+          </main>
+          <Footer />
+          <WhatsAppButton />
+        </CartProvider>
       </body>
     </html>
   );
