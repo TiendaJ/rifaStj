@@ -22,10 +22,8 @@ export function Navbar({ session }: NavbarProps) {
                 <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
-                        <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
-                            <span className="text-sm">J</span>
-                        </div>
-                        <span>Jshop</span>
+                        <img src="/logoBlack.png" alt="Jshop Logo" className="w-12 h-12 object-contain" />
+                        <span style={{ marginLeft: "-15px" }}>shop</span>
                     </Link>
 
                     {/* Desktop Nav */}

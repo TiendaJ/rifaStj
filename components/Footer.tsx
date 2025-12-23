@@ -10,11 +10,11 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}
                     <div className="md:col-span-2">
-                        <Link href="/" className="flex items-center gap-2 font-bold text-2xl tracking-tighter mb-4">
-                            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black">
-                                <span className="text-sm">J</span>
-                            </div>
-                            <span>Jshop</span>
+
+
+                        <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
+                            <img src="/logoWhite.png" alt="Jshop Logo" className="w-14 h-14 object-contain" />
+                            <span style={{ marginLeft: "-15px" }}  >shop</span>
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
                             La plataforma líder en rifas y productos exclusivos. Garantía, seguridad y confianza en cada transacción.
