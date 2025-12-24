@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Package, Users, Ticket, Grid, LogOut, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Package, Users, Ticket, Grid, LogOut, LayoutDashboard, Share2, ShoppingBag, CreditCard } from 'lucide-react';
 import { logout } from '@/app/actions/auth';
 
 export default function AdminLayoutClient({
@@ -20,6 +20,9 @@ export default function AdminLayoutClient({
         { href: '/admin/inscripciones', label: 'Inscripciones', icon: Grid },
         { href: '/admin/categorias', label: 'Categorías', icon: LayoutDashboard },
         { href: '/admin/productos', label: 'Productos', icon: Package },
+        { href: '/admin/pedidos', label: 'Pedidos', icon: ShoppingBag },
+        { href: '/admin/redes-sociales', label: 'Redes Sociales', icon: Share2 },
+        { href: '/admin/configuracion/mercadopago', label: 'Mercado Pago', icon: CreditCard },
     ];
 
     return (

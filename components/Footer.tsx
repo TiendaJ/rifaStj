@@ -1,24 +1,65 @@
 import Link from 'next/link';
-import { Lock } from 'lucide-react';
+import { Lock, Facebook, Instagram, Twitter, Linkedin, Youtube, ExternalLink, Share2, Music2 } from 'lucide-react';
+import { getSocialMediaLinks } from '@/app/actions/social-media';
 
-export function Footer() {
+// Map of icon names to components
+const IconMap: { [key: string]: any } = {
+    facebook: Facebook,
+    instagram: Instagram,
+    twitter: Twitter,
+    linkedin: Linkedin,
+    youtube: Youtube,
+    tiktok: Music2, // Using Music2 as a proxy for TikTok since it might not be in the version of lucide-react used
+    default: ExternalLink
+};
+
+export async function Footer() {
     const currentYear = new Date().getFullYear();
+    const { data: socialLinks } = await getSocialMediaLinks();
 
     return (
         <footer className="w-full bg-black text-white border-t border-gray-900 pt-16 pb-8">
             <div className="max-w-6xl mx-auto px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-2 space-y-6">
+                        <div>
+                            <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
+                                <img src="/logoWhite.png" alt="Jshop Logo" className="w-14 h-14 object-contain" />
+                                <span style={{ marginLeft: "-15px" }}  >Jshop</span>
+                            </Link>
+                            <p className="text-gray-400 text-sm leading-relaxed max-w-sm mt-2">
+                                La plataforma líder en rifas y productos exclusivos. Garantía, seguridad y confianza en cada transacción.
+                            </p>
+                        </div>
 
+                        {/* Social Links */}
+                        {socialLinks && socialLinks.length > 0 && (
+                            <div className="flex flex-wrap gap-4">
+                                {socialLinks.filter((link: any) => link.activo).map((link: any) => {
+                                    // Resolve icon component
+                                    const iconKey = link.icono?.toLowerCase() || 'default';
+                                    const IconComponent = IconMap[iconKey] || IconMap['default'];
 
-                        <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
-                            <img src="/logoWhite.png" alt="Jshop Logo" className="w-14 h-14 object-contain" />
-                            <span style={{ marginLeft: "-15px" }}  >shop</span>
-                        </Link>
-                        <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-                            La plataforma líder en rifas y productos exclusivos. Garantía, seguridad y confianza en cada transacción.
-                        </p>
+                                    return (
+                                        <a
+                                            key={link.id}
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition-all duration-300 group"
+                                            aria-label={link.nombre}
+                                            style={{
+                                                // Optional: Use the custom color on hover if provided
+                                                // borderColor: link.color || undefined 
+                                            }}
+                                        >
+                                            <IconComponent size={20} className="transition-transform group-hover:scale-110" />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Links */}
@@ -54,6 +95,6 @@ export function Footer() {
                     </p>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 }

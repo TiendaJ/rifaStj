@@ -42,6 +42,7 @@ model Participante {
   updated_at    DateTime @updatedAt
 
   inscripciones RifaParticipante[]
+  pedidos       Pedido[]
 }
 
 model RifaParticipante {
@@ -80,4 +81,60 @@ model Producto {
   updated_at   DateTime  @updatedAt
 
   categoria    Categoria @relation(fields: [categoria_id], references: [id])
+  detallesPedido DetallePedido[]
+}
+
+model ConfiguracionRedSocial {
+  id           String   @id @default(uuid())
+  nombre       String
+  url          String
+  icono        String? // Identificador del icono (ej: "facebook", "instagram", "tiktok")
+  color        String? // Color en hex o clase de tailwind opcional
+  activo       Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model Pedido {
+  id              String         @id @default(uuid())
+  participante_id String?
+  participante    Participante?  @relation(fields: [participante_id], references: [id])
+  
+  estado          String         @default("orden_recibida") // orden_recibida, procesando, listo_para_enviar, enviado, entregado, cancelado
+  total           Float
+  fecha_creacion  DateTime       @default(now())
+  updated_at      DateTime       @updatedAt
+  
+  codigo_rastreo  String?
+  empresa_envio   String?
+  
+  // Datos de envío snapshot
+  nombre_contacto String?
+  telefono        String?
+  direccion       String?
+  ciudad          String?
+  
+  detalles        DetallePedido[]
+}
+
+model DetallePedido {
+  id          String   @id @default(uuid())
+  pedido_id   String
+  pedido      Pedido   @relation(fields: [pedido_id], references: [id])
+  
+  producto_id String
+  producto    Producto @relation(fields: [producto_id], references: [id])
+  
+  cantidad    Int
+  precio_unitario Float
+}
+
+model ConfiguracionMercadoPago {
+  id           String   @id @default(uuid())
+  public_key   String
+  access_token String
+  environment  String   @default("sandbox") // sandbox, production
+  activo       Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 }

@@ -23,7 +23,7 @@ export function Navbar({ session }: NavbarProps) {
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
                         <img src="/logoBlack.png" alt="Jshop Logo" className="w-12 h-12 object-contain" />
-                        <span style={{ marginLeft: "-15px" }}>shop</span>
+                        <span style={{ marginLeft: "-15px" }}>Jshop</span>
                     </Link>
 
                     {/* Desktop Nav */}
@@ -37,8 +37,8 @@ export function Navbar({ session }: NavbarProps) {
                         <Link href="/productos?q=celular" className="hover:text-black transition-colors">
                             Celulares
                         </Link>
-                        <Link href="/productos?q=accesorios" className="hover:text-black transition-colors">
-                            Accesorios
+                        <Link href="/servicio-tecnico" className="hover:text-black transition-colors">
+                            Serv. Técnico
                         </Link>
                         <Link href="/rifas" className="hover:text-black transition-colors">
                             Rifas
@@ -111,11 +111,11 @@ export function Navbar({ session }: NavbarProps) {
                                 Celulares
                             </Link>
                             <Link
-                                href="/productos?q=accesorios"
+                                href="/servicio-tecnico"
                                 className="hover:text-black transition-colors py-2"
                                 onClick={() => setIsOpen(false)}
                             >
-                                Accesorios
+                                Serv. Técnico
                             </Link>
                             <Link
                                 href="/productos?q=oferta"

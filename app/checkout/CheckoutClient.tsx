@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronUp, ShoppingBag, ChevronLeft } from 'lucide-react';
+import { ChevronDown, ChevronUp, ShoppingBag, ChevronLeft, Trash2 } from 'lucide-react';
 
 interface Product {
     id: string;
@@ -14,10 +14,13 @@ interface Product {
 
 
 import { useCart } from '@/app/context/CartContext';
+import { createPedido } from '@/app/actions/pedidos';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutClient({ product, user }: { product: any, user?: any }) {
+    const router = useRouter();
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
-    const { items: cartItems, cartTotal } = useCart();
+    const { items: cartItems, cartTotal, removeFromCart, clearCart } = useCart();
 
     // Determine if we are in "Direct Buy" mode or "Cart Checkout" mode
     const isDirectBuy = !!product;
@@ -72,15 +75,42 @@ export default function CheckoutClient({ product, user }: { product: any, user?:
     const [city, setCity] = useState('');
     const [phone, setPhone] = useState('');
 
-    const handleWhatsAppCheckout = () => {
+
+
+    // ... inside component ...
+
+    const handleWhatsAppCheckout = async () => {
         if (items.length === 0) return;
+
+        // Create Order in DB
+        const result = await createPedido({
+            nombre: `${firstName} ${lastName}`,
+            telefono: phone,
+            email: email,
+            direccion: address,
+            ciudad: city,
+            total: total,
+            items: items.map(item => ({
+                id: item.id,
+                cantidad: item.cantidad,
+                precio: item.precio
+            })),
+            participante_id: user?.id
+        });
+
+        if (!result.success || !result.data) {
+            alert(`Hubo un error al procesar el pedido: ${result.error || 'Por favor intente nuevamente.'}`);
+            return;
+        }
+
+        const orderId = result.data.id.slice(0, 8); // Short ID for message
 
         let itemsList = '';
         items.forEach(item => {
             itemsList += `• ${item.nombre} (x${item.cantidad}) - S/ ${(item.precio * item.cantidad).toFixed(2)}\n`;
         });
 
-        const message = `*NUEVO PEDIDO WEB*\n\n` +
+        const message = `*NUEVO PEDIDO WEB #${orderId}*\n\n` +
             `*Cliente:* ${firstName} ${lastName}\n` +
             `*Email:* ${email}\n` +
             `*Teléfono:* ${phone}\n` +
@@ -88,8 +118,15 @@ export default function CheckoutClient({ product, user }: { product: any, user?:
             `*Productos:*\n${itemsList}\n` +
             `*Total a Pagar:* S/ ${total.toFixed(2)}`;
 
+        // Clear cart if not direct buy
+        if (!isDirectBuy) {
+            clearCart();
+        }
+
         const whatsappUrl = `https://wa.me/51951381439?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+
+        // Redirect to dashboard
+        router.push('/mi-dashboard');
     };
 
     if (items.length === 0) {
@@ -143,6 +180,14 @@ export default function CheckoutClient({ product, user }: { product: any, user?:
                                         <div className="flex-1">
                                             <h3 className="text-sm font-bold text-gray-900">{item.nombre}</h3>
                                             <p className="text-xs text-gray-500">{item.categoria}</p>
+                                            {!isDirectBuy && (
+                                                <button
+                                                    onClick={() => removeFromCart(item.id)}
+                                                    className="text-gray-400 hover:text-red-500 text-xs mt-1 flex items-center gap-1 transition-colors"
+                                                >
+                                                    <Trash2 size={12} /> Eliminar
+                                                </button>
+                                            )}
                                         </div>
                                         <div className="text-sm font-bold text-gray-900">S/ {(item.precio * item.cantidad).toFixed(2)}</div>
                                     </div>
@@ -330,6 +375,14 @@ export default function CheckoutClient({ product, user }: { product: any, user?:
                                     <div className="flex-1">
                                         <h3 className="text-sm font-bold text-gray-900 line-clamp-2">{item.nombre}</h3>
                                         <p className="text-xs text-gray-500 mt-1">{item.categoria}</p>
+                                        {!isDirectBuy && (
+                                            <button
+                                                onClick={() => removeFromCart(item.id)}
+                                                className="text-gray-400 hover:text-red-500 text-xs mt-1 flex items-center gap-1 transition-colors"
+                                            >
+                                                <Trash2 size={12} /> Eliminar
+                                            </button>
+                                        )}
                                     </div>
                                     <div className="text-sm font-bold text-gray-900">S/ {(item.precio * item.cantidad).toFixed(2)}</div>
                                 </div>
