@@ -102,101 +102,6 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
         router.push(`${pathname}?${params.toString()}`, { scroll: true });
     };
 
-    // Filter Sidebar Component
-    const FilterSidebar = () => (
-        <div className="space-y-8">
-            {/* Search (Mobile/Sidebar version) */}
-            <div className="block md:hidden mb-6">
-                <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="BUSCAR..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 focus:border-black outline-none font-semibold text-sm uppercase tracking-wide"
-                    />
-                    <Search className="absolute left-3 top-3.5 text-black w-4 h-4" />
-                </div>
-            </div>
-
-            {/* Categories */}
-            <div>
-                <h3 className="font-extrabold uppercase text-sm mb-4 tracking-widest">Categorías</h3>
-                <div className="flex flex-col gap-2">
-                    <button
-                        onClick={() => updateFilter('category', 'all')}
-                        className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialCategory === 'all' ? 'text-black font-bold border-l-2 border-black pl-2' : 'text-gray-500 hover:text-black'}`}
-                    >
-                        Todas
-                    </button>
-                    {categorias.map(cat => (
-                        <button
-                            key={cat.id}
-                            onClick={() => updateFilter('category', cat.id)}
-                            className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialCategory === cat.id ? 'text-black font-bold border-l-2 border-black pl-2' : 'text-gray-500 hover:text-black'}`}
-                        >
-                            {cat.descripcion}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Price */}
-            <div>
-                <h3 className="font-extrabold uppercase text-sm mb-4 tracking-widest">Precio</h3>
-                <div className="flex flex-col gap-4">
-                    <div className="flex gap-2 items-center">
-                        <input
-                            type="number"
-                            placeholder="MIN"
-                            value={minPrice}
-                            onChange={(e) => setMinPrice(e.target.value)}
-                            className="w-1/2 p-2 bg-white border border-gray-200 focus:border-black outline-none text-sm font-medium"
-                        />
-                        <span className="text-gray-400">-</span>
-                        <input
-                            type="number"
-                            placeholder="MAX"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(e.target.value)}
-                            className="w-1/2 p-2 bg-white border border-gray-200 focus:border-black outline-none text-sm font-medium"
-                        />
-                    </div>
-                    <button
-                        onClick={applyPriceFilter}
-                        className="w-full bg-black text-white py-2 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors"
-                    >
-                        Filtrar
-                    </button>
-                </div>
-            </div>
-
-            {/* Availability / Brands (Example structure) */}
-            {marcas.length > 0 && (
-                <div>
-                    <h3 className="font-extrabold uppercase text-sm mb-4 tracking-widest">Marca</h3>
-                    <div className="flex flex-col gap-2">
-                        <button
-                            onClick={() => updateFilter('marca', 'all')}
-                            className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialMarca === 'all' ? 'text-black font-bold' : 'text-gray-500 hover:text-black'}`}
-                        >
-                            Todas
-                        </button>
-                        {marcas.map(m => (
-                            <button
-                                key={m}
-                                onClick={() => updateFilter('marca', m)}
-                                className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialMarca === m ? 'text-black font-bold' : 'text-gray-500 hover:text-black'}`}
-                            >
-                                {m}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-
     return (
         <div className="min-h-screen bg-white text-black font-sans">
             {/* Header / Title Area */}
@@ -238,13 +143,39 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
 
                     {/* Sidebar Desktop */}
                     <aside className="hidden md:block w-64 shrink-0">
-                        <FilterSidebar />
+                        <FilterSidebar
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
+                            categorias={categorias}
+                            initialCategory={initialCategory}
+                            updateFilter={updateFilter}
+                            marcas={marcas}
+                            initialMarca={initialMarca}
+                            minPrice={minPrice}
+                            setMinPrice={setMinPrice}
+                            maxPrice={maxPrice}
+                            setMaxPrice={setMaxPrice}
+                            applyPriceFilter={applyPriceFilter}
+                        />
                     </aside>
 
                     {/* Mobile Sidebar (Collapsible) */}
                     {showFilters && (
                         <div className="md:hidden w-full mb-8 border-b border-gray-100 pb-8">
-                            <FilterSidebar />
+                            <FilterSidebar
+                                searchQuery={searchQuery}
+                                setSearchQuery={setSearchQuery}
+                                categorias={categorias}
+                                initialCategory={initialCategory}
+                                updateFilter={updateFilter}
+                                marcas={marcas}
+                                initialMarca={initialMarca}
+                                minPrice={minPrice}
+                                setMinPrice={setMinPrice}
+                                maxPrice={maxPrice}
+                                setMaxPrice={setMaxPrice}
+                                applyPriceFilter={applyPriceFilter}
+                            />
                         </div>
                     )}
 
@@ -368,3 +299,125 @@ export default function ProductCatalog({ productos, categorias, marcas, paginati
         </div>
     );
 }
+
+interface FilterSidebarProps {
+    searchQuery: string;
+    setSearchQuery: (val: string) => void;
+    categorias: Categoria[];
+    initialCategory: string;
+    updateFilter: (key: string, value: string) => void;
+    marcas: string[];
+    initialMarca: string;
+    minPrice: string;
+    setMinPrice: (val: string) => void;
+    maxPrice: string;
+    setMaxPrice: (val: string) => void;
+    applyPriceFilter: () => void;
+}
+
+const FilterSidebar = ({
+    searchQuery,
+    setSearchQuery,
+    categorias,
+    initialCategory,
+    updateFilter,
+    marcas,
+    initialMarca,
+    minPrice,
+    setMinPrice,
+    maxPrice,
+    setMaxPrice,
+    applyPriceFilter
+}: FilterSidebarProps) => (
+    <div className="space-y-8">
+        {/* Search (Mobile/Sidebar version) */}
+        <div className="block md:hidden mb-6">
+            <div className="relative">
+                <input
+                    type="text"
+                    placeholder="BUSCAR..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 focus:border-black outline-none font-semibold text-sm uppercase tracking-wide"
+                />
+                <Search className="absolute left-3 top-3.5 text-black w-4 h-4" />
+            </div>
+        </div>
+
+        {/* Categories */}
+        <div>
+            <h3 className="font-extrabold uppercase text-sm mb-4 tracking-widest">Categorías</h3>
+            <div className="flex flex-col gap-2">
+                <button
+                    onClick={() => updateFilter('category', 'all')}
+                    className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialCategory === 'all' ? 'text-black font-bold border-l-2 border-black pl-2' : 'text-gray-500 hover:text-black'}`}
+                >
+                    Todas
+                </button>
+                {categorias.map(cat => (
+                    <button
+                        key={cat.id}
+                        onClick={() => updateFilter('category', cat.id)}
+                        className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialCategory === cat.id ? 'text-black font-bold border-l-2 border-black pl-2' : 'text-gray-500 hover:text-black'}`}
+                    >
+                        {cat.descripcion}
+                    </button>
+                ))}
+            </div>
+        </div>
+
+        {/* Price */}
+        <div>
+            <h3 className="font-extrabold uppercase text-sm mb-4 tracking-widest">Precio</h3>
+            <div className="flex flex-col gap-4">
+                <div className="flex gap-2 items-center">
+                    <input
+                        type="number"
+                        placeholder="MIN"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        className="w-1/2 p-2 bg-white border border-gray-200 focus:border-black outline-none text-sm font-medium"
+                    />
+                    <span className="text-gray-400">-</span>
+                    <input
+                        type="number"
+                        placeholder="MAX"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        className="w-1/2 p-2 bg-white border border-gray-200 focus:border-black outline-none text-sm font-medium"
+                    />
+                </div>
+                <button
+                    onClick={applyPriceFilter}
+                    className="w-full bg-black text-white py-2 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors"
+                >
+                    Filtrar
+                </button>
+            </div>
+        </div>
+
+        {/* Availability / Brands (Example structure) */}
+        {marcas.length > 0 && (
+            <div>
+                <h3 className="font-extrabold uppercase text-sm mb-4 tracking-widest">Marca</h3>
+                <div className="flex flex-col gap-2">
+                    <button
+                        onClick={() => updateFilter('marca', 'all')}
+                        className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialMarca === 'all' ? 'text-black font-bold' : 'text-gray-500 hover:text-black'}`}
+                    >
+                        Todas
+                    </button>
+                    {marcas.map(m => (
+                        <button
+                            key={m}
+                            onClick={() => updateFilter('marca', m)}
+                            className={`text-left text-sm font-medium uppercase tracking-wide transition-colors ${initialMarca === m ? 'text-black font-bold' : 'text-gray-500 hover:text-black'}`}
+                        >
+                            {m}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        )}
+    </div>
+);
