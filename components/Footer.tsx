@@ -29,7 +29,7 @@ export async function Footer() {
                                 <span style={{ marginLeft: "-15px" }}  >Jshop</span>
                             </Link>
                             <p className="text-gray-400 text-sm leading-relaxed max-w-sm mt-2">
-                                La plataforma líder en rifas y productos exclusivos. Garantía, seguridad y confianza en cada transacción.
+                                La plataforma de productos exclusivos. Garantía, seguridad y confianza en cada transacción.
                             </p>
                         </div>
 

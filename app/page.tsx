@@ -129,7 +129,7 @@ export default async function HomePage() {
         <div className="max-w-[1200px] mx-auto px-6 md:px-8">
           <div className="text-left mb-12">
             <h2 className="text-[#6E6E6E] font-bold uppercase tracking-widest mb-4 text-[14px]">Categorías Clave</h2>
-            <p className="text-[26px] md:text-[32px] font-semibold leading-[1.3] text-white">Encuentra lo que necesitas con claridad.<br />Nada de confundir al cliente.</p>
+            <p className="text-[26px] md:text-[32px] font-semibold leading-[1.3] text-white">Encuentra lo que necesitas con claridad.<br />Todo Claro</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
@@ -142,7 +142,7 @@ export default async function HomePage() {
               <div className="h-[2px] w-full bg-[#333] group-hover:bg-white transition-all duration-300"></div>
             </Link>
             <a href="https://wa.me/51951381439" target="_blank" className="group block">
-              <div className="text-[26px] md:text-[32px] font-bold uppercase text-white group-hover:text-[#E5E5E5] transition-colors mb-2">Servicio Técnico</div>
+              <div className="text-[26px] md:text-[32px] font-bold uppercase text-white group-hover:text-[#E5E5E5] transition-colors mb-2">Serv.Técnico</div>
               <div className="h-[2px] w-full bg-[#333] group-hover:bg-white transition-all duration-300"></div>
             </a>
             <Link href="/productos" className="group block">
