@@ -1,5 +1,6 @@
 import { Wrench, Battery, Smartphone, ShieldCheck, Zap, Droplets, MapPin, Truck, Phone, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import FacebookFeed from "@/components/FacebookFeed";
 
 export default function ServicioTecnicoPage() {
     return (
@@ -20,7 +21,7 @@ export default function ServicioTecnicoPage() {
                         Reparación <br /> Profesional.
                     </h1>
                     <p className="text-[16px] md:text-[18px] text-gray-200 mb-8 max-w-2xl mx-auto font-normal leading-relaxed">
-                        Repuestos originales, técnicos certificados y garantía real. <br />Devolvemos la vida a tu equipo sin excusas.
+                        Repuestos, técnicos con experiencia y garantía real. <br />Devolvemos la vida a tu equipo sin excusas.
                     </p>
                     <Link
                         href="https://wa.me/51951381439?text=Hola,%20quisiera%20consultar%20por%20servicio%20técnico"
@@ -188,6 +189,26 @@ export default function ServicioTecnicoPage() {
                                     <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* FACEBOOK COMMUNITY SECTION */}
+            <section className="py-[100px] bg-[#F9F9F9] border-t border-[#E5E5E5]">
+                <div className="max-w-[1200px] mx-auto px-6 text-center">
+                    <div className="mb-12">
+                        <h2 className="text-[30px] md:text-[50px] font-extrabold leading-[1] tracking-[-1px] uppercase mb-4 text-black">
+                            Comunidad Jshop
+                        </h2>
+                        <p className="text-[16px] text-[#666] font-medium max-w-2xl mx-auto">
+                            Únete a nuestra comunidad en Facebook. Mira los últimos trabajos, sorteos y las opiniones de nuestros clientes satisfechos.
+                        </p>
+                    </div>
+
+                    <div className="flex justify-center w-full">
+                        <div className="bg-white p-4 shadow-xl border border-gray-100 max-w-[550px] w-full">
+                            <FacebookFeed pageUrl="https://www.facebook.com/jarelrepair" height={600} />
                         </div>
                     </div>
                 </div>
